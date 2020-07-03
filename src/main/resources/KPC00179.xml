@@ -1,0 +1,51 @@
+<stream name="TE000902" format="fixedlength">
+	<typeHandler name="comp3v9th" class="io.ms.tool.Comp3TypeHandler" />
+	<typeHandler name="compth" class="io.ms.tool.UCompTypeHandler" />
+	<record name="TE000902_RECORD" class="io.ms.tool.TE000902">
+		<field name="te000902codist" length="2" padding=" " /> <!-- starts at: 0 -->
+		<field name="te000902codktr" length="13" padding=" " /> <!-- starts at: 2 -->
+		<field name="te000902codsia" length="5" padding=" " /> <!-- starts at: 15 -->
+		<field name="te000902codrap" length="13" padding=" " /> <!-- starts at: 20 -->
+		<field name="te000902codcnl" length="4" padding=" " /> <!-- starts at: 33 -->
+		<field name="te000902codabi" length="5" padding=" " /> <!-- starts at: 37 -->
+		<field name="te000902yndgcl" length="12" padding=" " /> <!-- starts at: 42 -->
+		<field name="te000902dfirkr" length="8" padding=" " /> <!-- starts at: 54 -->
+		<field name="te000902dchikr" length="8" padding=" " /> <!-- starts at: 62 -->
+		<field name="te000902yctral" length="5" padding=" " /> <!-- starts at: 70 -->
+		<field name="te000902cbcale" length="5" padding=" " /> <!-- starts at: 75 -->
+		<field name="te000902yitscl" length="40" padding=" " /> <!-- starts at: 80 -->
+		<field name="te000902codptz" length="5" padding=" " /> <!-- starts at: 120 -->
+		<field name="te000902cktrpr" length="13" padding=" " /> <!-- starts at: 125 -->
+		<field name="te000902codaid" length="6" padding=" " /> <!-- starts at: 138 -->
+		<field name="te000902fablcf" length="1" padding=" " /> <!-- starts at: 144 -->
+		<field name="te000902ykeycf" length="8" padding=" " /> <!-- starts at: 145 -->
+		<field name="te000902cabiqu" length="5" padding=" " /> <!-- starts at: 153 -->
+		<field name="te000902tcutml" length="1" padding=" " /> <!-- starts at: 158 -->
+		<field name="te000902cptzr8" length="4" padding=" " /> <!-- starts at: 159 -->
+		<field name="te000902cptzr2" length="8" padding=" " /> <!-- starts at: 163 -->
+		<field name="te000902calsr2" length="30" padding=" " /> <!-- starts at: 171 -->
+		<field name="te000902codctg" length="4" padding=" " /> <!-- starts at: 201 -->
+		<field name="te000902codstg" length="4" padding=" " /> <!-- starts at: 205 -->
+		<field name="te000902ebtpdi" length="3" padding=" " /> <!-- starts at: 209 -->
+		<field name="te000902codcab" length="5" padding=" " /> <!-- starts at: 212 -->
+		<field name="te000902yconct" length="12" padding=" " /> <!-- starts at: 217 -->
+		<field name="te000902ccinab" length="1" padding=" " /> <!-- starts at: 229 -->
+		<field name="te000902coddiv" length="1" padding=" " /> <!-- starts at: 230 -->
+		<field name="te000902cdivis" length="3" padding=" " /> <!-- starts at: 231 -->
+		<field name="te000902cistle" length="2" padding=" " /> <!-- starts at: 234 -->
+		<field name="te000902codlin" length="1" padding=" " /> <!-- starts at: 236 -->
+		<field name="te000902cpavef" length="12" padding=" " /> <!-- starts at: 237 -->
+		<field name="te000902yiseml" length="16" padding=" " /> <!-- starts at: 249 -->
+		<field name="te000902codpdt" length="8" padding=" " /> <!-- starts at: 265 -->
+		<field name="te000902ccnlcb" length="2" padding=" " /> <!-- starts at: 273 -->
+		<field name="te000902csiapr" length="5" padding=" " /> <!-- starts at: 275 -->
+		<field name="te000902codpae" length="2" padding=" " /> <!-- starts at: 280 -->
+		<field name="te000902ccinib" length="2" padding="0" justify="right" /> <!-- starts at: 282 -->
+		<field name="te000902fablcb" length="1" padding=" " /> <!-- starts at: 284 -->
+		<field name="te000902flgmbc" length="1" padding=" " /> <!-- starts at: 285 -->
+		<field name="10" length="262" padding=" " /> <!-- starts at: 286 -->
+		<field name="te000902neblin" length="4" padding=" " /> <!-- starts at: 548 -->
+		<field name="te000902yppfif" length="8" padding=" " /> <!-- starts at: 552 -->
+		<field name="te000902ftipfl" length="1" padding=" " /> <!-- starts at: 560 -->
+	</record>
+</stream>
