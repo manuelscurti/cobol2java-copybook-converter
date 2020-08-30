@@ -46,5 +46,20 @@ public class ParsingTest {
         }
     }
 
+    /**
+     * Used for development only
+     */
+    @Test
+    public void lineParsingTest() throws IOException {
+        CopybookParser parser = new StandardParser();
+        List<RawField> rawFields = parser.parse("src/test/resources/single_line.cpy");
+
+//        String[] tokens = new String[] {"CIAO:AN0233."};
+//        if (tokens[tokens.length - 1].matches("[0-9a-zA-Z\\-.]*")) {
+//            System.out.println("ok");
+//        }
+
+    }
+
 
 }
