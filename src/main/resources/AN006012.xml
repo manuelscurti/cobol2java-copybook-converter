@@ -1,0 +1,20 @@
+<stream name="AN006012" format="fixedlength">
+	<typeHandler name="comp3th" class="it.cedacri.util.typehandler.comp.Comp3TypeHandler" />
+	<typeHandler name="compth" class="it.cedacri.util.typehandler.comp.UCompTypeHandler" />
+	<record name="AN006012_RECORD" class="it.cedacri.be.data.model.AN006012">
+		<field name="an6012proced" length="4" padding=" " /> <!-- starts at: 0 -->
+		<field name="an6012tabella" length="3" padding=" " /> <!-- starts at: 4 -->
+		<field name="an6012cdpolo" length="4" padding=" " /> <!-- starts at: 7 -->
+		<field name="an6012cdistc" length="2" typeHandler="comp3th" format="3" padding=" " /> <!-- starts at: 11 -->
+		<field name="an6012cdisti" length="6" padding=" " /> <!-- starts at: 13 -->
+		<field name="an6012nncg" length="3" padding=" " /> <!-- starts at: 19 -->
+		<field name="filler" length="42" ignore="true" /> <!-- starts at: 22 -->
+		<field name="an6012fsegui" length="1" padding=" " /> <!-- starts at: 64 -->
+		<field name="an6012descrnncg" length="60" padding=" " /> <!-- starts at: 65 -->
+		<field name="an6012socdicapitale" length="1" padding=" " /> <!-- starts at: 125 -->
+		<field name="an6012progzeb" length="3" padding="0" justify="right" /> <!-- starts at: 126 -->
+		<field name="filler2" length="190" ignore="true" /> <!-- starts at: 129 -->
+		<field name="an6012data" length="8" padding=" " /> <!-- starts at: 319 -->
+		<field name="an6012uteagg" length="8" padding=" " /> <!-- starts at: 327 -->
+	</record>
+</stream>

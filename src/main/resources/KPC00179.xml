@@ -44,8 +44,8 @@
 		<field name="te000902fablcb" length="1" padding=" " /> <!-- starts at: 284 -->
 		<field name="te000902flgmbc" length="1" padding=" " /> <!-- starts at: 285 -->
 		<field name="10" length="262" padding=" " /> <!-- starts at: 286 -->
-		<field name="te000902neblin" length="4" padding=" " /> <!-- starts at: 548 -->
-		<field name="te000902yppfif" length="8" padding=" " /> <!-- starts at: 552 -->
-		<field name="te000902ftipfl" length="1" padding=" " /> <!-- starts at: 560 -->
+		<field name="te000902neblin" length="2" typeHandler="compth" format="4" padding=" " /> <!-- starts at: 548 -->
+		<field name="te000902yppfif" length="8" padding=" " /> <!-- starts at: 550 -->
+		<field name="te000902ftipfl" length="1" padding=" " /> <!-- starts at: 558 -->
 	</record>
 </stream>

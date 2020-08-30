@@ -1,0 +1,27 @@
+<stream name="AN006253" format="fixedlength">
+	<typeHandler name="comp3v9th" class="it.cedacri.util.typehandler.comp.Comp3TypeHandler" />
+	<typeHandler name="compth" class="it.cedacri.util.typehandler.comp.UCompTypeHandler" />
+	<record name="AN006253_RECORD" class="it.cedacri.an.data.model.AN006253">
+		<field name="an6253sogliapfdi" length="3" padding="0" justify="right" /> <!-- starts at: 0 -->
+		<field name="an6253sogliaaltri" length="3" padding="0" justify="right" /> <!-- starts at: 3 -->
+		<field name="an6253sogliabonifici" length="3" padding="0" justify="right" /> <!-- starts at: 6 -->
+		<field name="an6253versionecalcolo" length="3" padding="0" justify="right" /> <!-- starts at: 9 -->
+		<field name="filler" length="9" padding="0" justify="right" /> <!-- starts at: 12 -->
+		<field name="an6253puntiintest" length="3" padding="0" justify="right" /> <!-- starts at: 21 -->
+		<field name="an6253puntidtnas" length="3" padding="0" justify="right" /> <!-- starts at: 24 -->
+		<field name="an6253punticifredtnas" length="3" padding="0" justify="right" /> <!-- starts at: 27 -->
+		<field name="an6253puntinazionenas" length="3" padding="0" justify="right" /> <!-- starts at: 30 -->
+		<field name="an6253punticodfis" length="3" padding="0" justify="right" /> <!-- starts at: 33 -->
+		<field name="an6253puntisesso" length="3" padding="0" justify="right" /> <!-- starts at: 36 -->
+		<field name="an6253puntiassenzadnas" length="3" padding="0" justify="right" /> <!-- starts at: 39 -->
+		<field name="an6253puntiassenzalnas" length="3" padding="0" justify="right" /> <!-- starts at: 42 -->
+		<field name="an6253decurtpuntidnas" length="3" padding="0" justify="right" /> <!-- starts at: 45 -->
+		<field name="filler" length="3" padding="0" justify="right" /> <!-- starts at: 48 -->
+		<field name="an6253ggappross" length="5" padding="0" justify="right" /> <!-- starts at: 51 -->
+		<field name="an6253autocertndg" length="1" padding=" " /> <!-- starts at: 56 -->
+		<field name="an6253storicizndg" length="1" padding=" " /> <!-- starts at: 57 -->
+		<field name="an6253escldnassanz" length="1" padding=" " /> <!-- starts at: 58 -->
+		<field name="an6253escldnaspep" length="1" padding=" " /> <!-- starts at: 59 -->
+		<field name="filler" length="194" padding=" " /> <!-- starts at: 60 -->
+	</record>
+</stream>

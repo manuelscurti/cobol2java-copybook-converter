@@ -8,12 +8,15 @@ public class RawField {
     String name;
     String typePattern;
     List<String> params;
+    String comment;
+    boolean isFiller;
 
-    public RawField(Integer level, String name, String typePattern, List<String> params) {
+    public RawField(Integer level, String name, String typePattern, List<String> params, boolean isFiller) {
         this.level = level;
         this.name = name;
         this.typePattern = typePattern;
         this.params = params;
+        this.isFiller = isFiller;
     }
 
     public String getName() {
@@ -30,6 +33,10 @@ public class RawField {
 
     public List<String> getParams() {
         return params;
+    }
+
+    public boolean isFiller() {
+        return isFiller;
     }
 
     @Override

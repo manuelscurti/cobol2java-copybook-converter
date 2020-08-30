@@ -44,7 +44,7 @@ public class TE000902 {
 	Character te000902fablcb;
 	Character te000902flgmbc;
 	String 10;
-	String te000902neblin;
+	Comp te000902neblin;
 	String te000902yppfif;
 	Character te000902ftipfl;
 
