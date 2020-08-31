@@ -9,7 +9,7 @@ import java.util.List;
  *
  * e.g. 05  AN0233-AREAEL PIC X(5).
  */
-public class PicField extends RawField2 {
+public class PicField extends RawField {
 
     String typePattern;
     List<String> params;

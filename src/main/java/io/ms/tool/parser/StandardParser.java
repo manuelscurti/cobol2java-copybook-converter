@@ -27,47 +27,29 @@ public class StandardParser implements CopybookParser {
     private static final int MINIMUM_TOKEN_NUMBER = 2; //to be a valid candidate to become a field
 
     //CORE FUNCTIONALITIES
-    RawField2 lastParsedField;
-    Stack<List<RawField2>> fieldsStack;
+    RawField lastParsedField;
+    Stack<List<RawField>> fieldsStack;
 
     @Override
     public List<RawField> parse(String filepath) throws IOException {
         stats = new ParserStats(); //reset stats
+        CopybookLevelsHandler levelsHandler = new CopybookLevelsHandler();
+
         lastParsedField = null;
         fieldsStack = new Stack<>();
 
         BufferedReader reader = new BufferedReader(new FileReader(filepath));
 
         String line;
-        List<RawField2> rawFields = new ArrayList<>();
+        List<RawField> rawFields = new ArrayList<>();
         fieldsStack.push(rawFields);
 
         while ((line = reader.readLine()) != null) {
-            RawField2 rawField = preprocess(line);
-            if (rawField != null && lastParsedField != null) {
-                if ((lastParsedField instanceof GroupField) && rawField.getLevel() > lastParsedField.getLevel()) {
-                    //going deep
-                    ((GroupField) lastParsedField).insertSubfield(rawField);
-                    fieldsStack.push(((GroupField) lastParsedField).getSubfields());
-                } else if (rawField.getLevel() < lastParsedField.getLevel()) {
-                    //going up
-                    List<RawField2> currentFieldList = fieldsStack.pop(); //removes current level
-                    while (rawField.getLevel() < currentFieldList.get(0).getLevel()) {
-                        currentFieldList = fieldsStack.pop();
-                    }
-                    currentFieldList.add(rawField);
-                    fieldsStack.push(currentFieldList);
-                } else {
-                    List<RawField2> currentFieldList = fieldsStack.pop();
-                    currentFieldList.add(rawField);
-                    fieldsStack.push(currentFieldList);
-                }
-            } else if (lastParsedField == null) {
-                List<RawField2> currentFieldList = fieldsStack.pop();
-                currentFieldList.add(rawField);
-                fieldsStack.push(currentFieldList);
+            RawField rawField = preprocess(line);
+
+            if (rawField != null) {
+                levelsHandler.addField(rawField);
             }
-            this.lastParsedField = rawField;
         }
 
 //        debugRawFields(rawFields);
@@ -86,7 +68,7 @@ public class StandardParser implements CopybookParser {
         return stats;
     }
 
-    private RawField2 preprocess(String line) {
+    private RawField preprocess(String line) {
         String proc0 = line.trim();
 
         //FIXME: to be hierarchy preserving, this control here has to be deprecated
@@ -94,6 +76,10 @@ public class StandardParser implements CopybookParser {
 //            stats.insertDiscardedLine(line);
 //            return null;
 //        }
+
+        if (proc0.isEmpty()) {
+            return null;
+        }
 
         if (CobolUtils.isLineCommented(proc0)) {
             stats.insertDiscardedLine(line);
@@ -140,7 +126,7 @@ public class StandardParser implements CopybookParser {
 //        }
 //
 //        return new RawField(level, fieldName, typeDefinitionPattern, params, isFiller);
-        RawField2 rawField = patternMatcher(proc2, ",");
+        RawField rawField = patternMatcher(proc2, ",");
 
 
         return rawField;
@@ -148,27 +134,33 @@ public class StandardParser implements CopybookParser {
 
     /**
      *  * formats:
-     *  CASE 1* [level] [field name] PIC [type].              --supported
-     *  CASE 2* [level] FILLER PIC X([num]).                  --supported
-     *  CASE 3* [level] [field name].                         --supported
-     *  CASE 4* [level] [field name] OCCURS [number of reps]. --supported
+     *  CASE 1* [level] [field name] PIC [type].                        --supported
+     *  CASE 2* [level] FILLER PIC X([num]).                            --supported
+     *  CASE 3* [level] [field name].                                   --supported
+     *  CASE 4* [level] [field name] OCCURS [number of reps].           --supported
+     *  CASE 5* [level] [field name] OCCURS [number of reps] PIC [type] --supported
      *  *
      *  * minimum number of tokens to be a valid candidate: 2
      * @param line
      * @param separator
      */
-    private RawField2 patternMatcher(String line, String separator) {
-        RawField2 field = null;
+    private RawField patternMatcher(String line, String separator) {
+        RawField field;
         String[] tokens = line.split(separator);
 
-        //search for the language-specific keyword "PIC" or "OCCURS"
-        int langPos;
-        if ((langPos = StringUtils.searchFirstOccurrence(tokens, "PIC")) != StringUtils.NOT_FOUND) {
+        //search for the language-specific keywords "PIC" or "OCCURS"
+        int picPos = StringUtils.searchFirstOccurrence(tokens, "PIC");
+        int occursPos = StringUtils.searchFirstOccurrence(tokens, "OCCURS");
+
+        if (picPos != StringUtils.NOT_FOUND && occursPos != StringUtils.NOT_FOUND) {
+            //CASE 5
+            field = composeGroupListField(tokens, picPos, occursPos);
+        } else if (picPos != StringUtils.NOT_FOUND) {
             //CASE 1 OR 2
-            field = composePictureField(tokens, langPos);
-        } else if ((langPos = StringUtils.searchFirstOccurrence(tokens, "OCCURS")) != StringUtils.NOT_FOUND) {
+            field = composePictureField(tokens, picPos);
+        } else if (occursPos != StringUtils.NOT_FOUND) {
             //CASE 4
-            field = composeListField(tokens, langPos);
+            field = composeListField(tokens, occursPos);
         } else {
             //CASE 3 or other not mentioned cases
             field = composeGroupField(tokens);
@@ -204,6 +196,23 @@ public class StandardParser implements CopybookParser {
         Integer repetitions = Integer.parseInt(tokens[indexOfOccurs + 1].replaceAll("\\.", ""));
 
         return new GroupField(null, level, fieldName, null, repetitions);
+    }
+
+    private GroupField composeGroupListField(String[] tokens, int indexOfPic, int indexOfOccurs) {
+        Integer level = Integer.parseInt(tokens[indexOfOccurs - 2]);
+        String fieldName = tokens[indexOfOccurs - 1].replaceAll("[:-]", "").toLowerCase();
+        Integer repetitions = Integer.parseInt(tokens[indexOfOccurs + 1].replaceAll("\\.", ""));
+
+        String typeDefinition = reconstructTypeField(tokens, indexOfPic);
+        List<String> params = parseFieldParams(typeDefinition);
+        String typeDefinitionPattern = extractPattern(typeDefinition);
+
+        boolean isFiller = CobolUtils.isFiller(fieldName);
+
+        GroupField group = new GroupField(null, level, fieldName, null);
+        group.insertSubfield(new PicField(null, level, fieldName, null, typeDefinitionPattern, params, isFiller));
+
+        return group;
     }
 
     /**

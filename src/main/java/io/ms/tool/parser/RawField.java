@@ -1,72 +1,58 @@
 package io.ms.tool.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RawField {
 
+    String originalLine;
     Integer level;
     String name;
-    String typePattern;
-    List<String> params;
     String comment;
-    boolean isFiller;
 
-    List<RawField> subfields;
-
-    public RawField(Integer level, String name, String typePattern, List<String> params, boolean isFiller) {
+    public RawField(String originalLine, Integer level, String name, String comment) {
+        this.originalLine = originalLine;
         this.level = level;
         this.name = name;
-        this.typePattern = typePattern;
-        this.params = params;
-        this.isFiller = isFiller;
-    }
-
-    public RawField(Integer level, String name, String typePattern, List<String> params, boolean isFiller, String comment) {
-        this.level = level;
-        this.name = name;
-        this.typePattern = typePattern;
-        this.params = params;
-        this.isFiller = isFiller;
         this.comment = comment;
-    }
-
-
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTypePattern() {
-        return typePattern;
     }
 
     public Integer getLevel() {
         return level;
     }
 
-    public List<String> getParams() {
-        return params;
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
-    public boolean isFiller() {
-        return isFiller;
+    public String getName() {
+        return name;
     }
 
-    public void initSubfields() {
-        this.subfields = new ArrayList<>();
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public List<RawField> getSubfields() {
-        return subfields;
+    public String getComment() {
+        return comment;
     }
 
-    public void insertSubfield(RawField subfield) {
-        this.subfields.add(subfield);
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getOriginalLine() {
+        return originalLine;
+    }
+
+    public void setOriginalLine(String originalLine) {
+        this.originalLine = originalLine;
     }
 
     @Override
     public String toString() {
-        return level + " " + name + " " + typePattern + " " + params;
+        return "RawField{" +
+                "originalLine='" + originalLine + '\'' +
+                ", level=" + level +
+                ", name='" + name + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
     }
 }

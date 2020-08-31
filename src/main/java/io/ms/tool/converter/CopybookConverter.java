@@ -2,10 +2,9 @@ package io.ms.tool.converter;
 
 import io.ms.tool.core.CobolType;
 import io.ms.tool.core.TypePattern;
-import io.ms.tool.parser.RawField;
+import io.ms.tool.parser.RawField_old;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class CopybookConverter {
@@ -23,10 +22,10 @@ public class CopybookConverter {
     }
 
 
-    public List<Field> convert(List<RawField> rawFields) {
+    public List<Field> convert(List<RawField_old> rawFields) {
         List<Field> fields = new ArrayList<>();
 
-        for (RawField rawField : rawFields) {
+        for (RawField_old rawField : rawFields) {
             if (conversionMap.containsKey(rawField.getTypePattern())) {
                 fields.add(convertField(conversionMap.get(rawField.getTypePattern()), rawField));
             } else {
@@ -49,7 +48,7 @@ public class CopybookConverter {
         return fields;
     }
 
-    private Field convertField(TypePattern typeConverter, RawField rawField) {
+    private Field convertField(TypePattern typeConverter, RawField_old rawField) {
         typeConverter.setup(rawField.getName(), rawField.getParams());
         Field finalField = new Field(typeConverter.getBeanIOMap(), typeConverter.getJavaProperty());
         System.out.println(finalField);

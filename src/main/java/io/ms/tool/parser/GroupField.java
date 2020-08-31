@@ -10,9 +10,9 @@ import java.util.List;
  *
  * e.g. 05  AN0233-AREAEL.
  */
-public class GroupField extends RawField2 {
+public class GroupField extends RawField {
 
-    List<RawField2> subfields;
+    List<RawField> subfields;
     Integer numberReps;
 
     public GroupField(String originalLine, Integer level, String name, String comment, Integer numberReps) {
@@ -25,11 +25,11 @@ public class GroupField extends RawField2 {
         this(originalLine, level, name, comment, 1);
     }
 
-    public List<RawField2> getSubfields() {
+    public List<RawField> getSubfields() {
         return subfields;
     }
 
-    public void insertSubfield(RawField2 subfield) {
+    public void insertSubfield(RawField subfield) {
         this.subfields.add(subfield);
     }
 

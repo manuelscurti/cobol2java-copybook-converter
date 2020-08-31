@@ -10,10 +10,7 @@ public class CobolUtils {
      * @return true if line is commented
      */
     public static boolean isLineCommented(String line) {
-        int posCommentChar = line.indexOf("*");
-        int posPicBlock = line.indexOf("PIC");
-
-        return posCommentChar != -1 && posCommentChar < posPicBlock;
+        return line.trim().indexOf("*") == 0; //the * must be the first character in the line
     }
 
     public static boolean isFiller(String line) {

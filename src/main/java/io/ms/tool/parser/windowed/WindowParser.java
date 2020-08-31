@@ -1,6 +1,6 @@
 package io.ms.tool.parser.windowed;
 
-import io.ms.tool.parser.RawField;
+import io.ms.tool.parser.RawField_old;
 import io.ms.tool.util.CobolUtils;
 
 import java.io.BufferedReader;
@@ -16,7 +16,7 @@ public class WindowParser {
 
     int fieldsFound = 0;
     List<String> discardedLines;
-    Map<String, RawField> recognizedFields;
+    Map<String, RawField_old> recognizedFields;
 
     /**
      * Algorithm:
@@ -33,11 +33,11 @@ public class WindowParser {
 
 
 
-    public List<RawField> parse(String filepath) throws IOException {
+    public List<RawField_old> parse(String filepath) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(filepath));
 
         String line;
-        List<RawField> rawFields = new ArrayList<>();
+        List<RawField_old> rawFields = new ArrayList<>();
 
 //        while ((line = reader.readLine()) != null) {
 //            RawField rawField = preprocess(line);
@@ -133,21 +133,21 @@ public class WindowParser {
             return null;
         }
 
-        RawField field = parseField(tokens, indexOfPic);
+        RawField_old field = parseField(tokens, indexOfPic);
 
         recognizedFields.put(field.getName(), field);
 
         return null;
     }
 
-    protected RawField parseField(String[] tokens, int indexOfPic) {
+    protected RawField_old parseField(String[] tokens, int indexOfPic) {
         Integer level = Integer.parseInt(tokens[indexOfPic - 2]);
         String fieldName = tokens[indexOfPic - 1].replaceAll("[:-]", "").toLowerCase();
         String typeDefinition = reconstructTypeField(tokens, indexOfPic);
         List<String> params = parseParams(typeDefinition);
         String typeDefinitionPattern = extractPattern(typeDefinition);
 
-        return new RawField(level, fieldName, typeDefinitionPattern, params, false);
+        return new RawField_old(level, fieldName, typeDefinitionPattern, params, false);
     }
 
     private String reconstructTypeField(String[] tokens, int indexOfPic) {

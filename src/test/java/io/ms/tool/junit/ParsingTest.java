@@ -1,7 +1,7 @@
 package io.ms.tool.junit;
 
 import io.ms.tool.parser.CopybookParser;
-import io.ms.tool.parser.RawField;
+import io.ms.tool.parser.RawField_old;
 import io.ms.tool.parser.StandardParser;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ public class ParsingTest {
     @Test
     public void commentsRemovalAndBasicParsing() throws IOException {
         CopybookParser parser = new StandardParser();
-        List<RawField> rawFields = parser.parse("src/test/resources/AN000233_short.cpy");
+        List<RawField_old> rawFields = parser.parse("src/test/resources/AN000233_short.cpy");
 
         assertEquals(33, parser.inspectParser().getEffectiveFields());
 
@@ -24,9 +24,9 @@ public class ParsingTest {
     @Test
     public void fillerDetectTest() throws IOException {
         CopybookParser parser = new StandardParser();
-        List<RawField> rawFields = parser.parse("src/test/resources/AN000233_wFiller.cpy");
+        List<RawField_old> rawFields = parser.parse("src/test/resources/AN000233_wFiller.cpy");
 
-        for (RawField field : rawFields) {
+        for (RawField_old field : rawFields) {
             if (!field.isFiller()) {
                 System.out.println(field);
             }
@@ -37,9 +37,9 @@ public class ParsingTest {
     @Test
     public void hierarchyPreservingTest() throws IOException {
         CopybookParser parser = new StandardParser();
-        List<RawField> rawFields = parser.parse("src/test/resources/AN000233_hierarchy.cpy");
+        List<RawField_old> rawFields = parser.parse("src/test/resources/AN000233_hierarchy.cpy");
 
-        for (RawField field : rawFields) {
+        for (RawField_old field : rawFields) {
             if (!field.isFiller()) {
                 System.out.println(field);
             }
@@ -52,7 +52,7 @@ public class ParsingTest {
     @Test
     public void lineParsingTest() throws IOException {
         CopybookParser parser = new StandardParser();
-        List<RawField> rawFields = parser.parse("src/test/resources/single_line.cpy");
+        List<RawField_old> rawFields = parser.parse("src/test/resources/AN000233_full.cpy");
 
 //        String[] tokens = new String[] {"CIAO:AN0233."};
 //        if (tokens[tokens.length - 1].matches("[0-9a-zA-Z\\-.]*")) {
