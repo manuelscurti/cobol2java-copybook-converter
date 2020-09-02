@@ -1,4 +1,4 @@
-package io.ms.tool.copybookconverter.parser;
+package io.ms.tool.copybookconverter.exception;
 
 import io.ms.tool.copybookconverter.parser.model.RawField;
 

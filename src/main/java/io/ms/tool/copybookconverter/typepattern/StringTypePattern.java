@@ -1,8 +1,11 @@
-package io.ms.tool.copybookconverter.core;
+package io.ms.tool.copybookconverter.typepattern;
+
+import io.ms.tool.copybookconverter.export.java.IJavaExport;
+import io.ms.tool.copybookconverter.export.java.model.JavaField;
 
 import java.util.List;
 
-public class StringTypePattern implements TypePattern {
+public class StringTypePattern implements TypePattern, IJavaExport {
 
     private String name;
     private Integer length;
@@ -31,12 +34,14 @@ public class StringTypePattern implements TypePattern {
     }
 
     @Override
-    public String getJavaProperty() {
+    public JavaField getJavaField() {
+        String javaType;
         if (length == 1) {
-            return String.format(JAVA_PROPERTY_CHAR, name);
+            javaType = "Character";
+        } else {
+            javaType = "String";
         }
 
-        return String.format(JAVA_PROPERTY_STR, name);
+        return new JavaField(name, javaType, "");
     }
-
 }

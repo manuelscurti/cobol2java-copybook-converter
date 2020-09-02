@@ -1,18 +1,17 @@
 package io.ms.tool.copybookconverter.converter;
 
-import io.ms.tool.copybookconverter.converter.xml.Field;
 import io.ms.tool.copybookconverter.converter.xml.Copybook;
+import io.ms.tool.copybookconverter.converter.xml.Field;
 import io.ms.tool.copybookconverter.export.CopybookExport;
 import io.ms.tool.copybookconverter.parser.model.GroupField;
 import io.ms.tool.copybookconverter.parser.model.PicField;
 import io.ms.tool.copybookconverter.parser.model.RawField;
+import io.ms.tool.copybookconverter.util.CopybookPrinter;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import org.springframework.stereotype.Component;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,29 +21,32 @@ public class StandardConverter implements CopybookConverter {
     private static final String TRUE_VALUE = "true";
 
     @Override
-    public Copybook convert(List<RawField> fields, OutputStream outputXml, String copybookName) {
+    public String convert(List<RawField> fields, String copybookName) {
         Copybook copybook = new Copybook(copybookName, new ArrayList<>());
 
         for (RawField field : fields) {
             depthFirstVisit(field, copybook.getFields());
         }
 
+        String xmlString = "";
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Copybook.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(copybook, System.out);
-            jaxbMarshaller.marshal(copybook, outputXml);
+            CopybookPrinter printer = new CopybookPrinter();
+            jaxbMarshaller.marshal(copybook, printer);
+
+            xmlString = printer.getString();
         } catch (JAXBException e) {
             e.printStackTrace();
         }
 
-        return copybook;
+        return xmlString;
     }
 
     @Override
-    public void exportTo(CopybookExport exporter, InputStream xmlCopybook, OutputStream outputFolder) {
-
+    public String exportTo(CopybookExport exporter, String xmlCopybook) {
+        return exporter.export(xmlCopybook);
     }
 
     private void depthFirstVisit(RawField start, List<Field> currentGroup) {

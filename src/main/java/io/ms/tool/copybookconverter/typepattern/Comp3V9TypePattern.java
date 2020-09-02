@@ -1,8 +1,11 @@
-package io.ms.tool.copybookconverter.core;
+package io.ms.tool.copybookconverter.typepattern;
+
+import io.ms.tool.copybookconverter.export.java.IJavaExport;
+import io.ms.tool.copybookconverter.export.java.model.JavaField;
 
 import java.util.List;
 
-public class Comp3V9TypePattern implements TypePattern {
+public class Comp3V9TypePattern implements TypePattern, IJavaExport {
 
     private String name;
     private Integer packedSize; //length of field
@@ -36,7 +39,7 @@ public class Comp3V9TypePattern implements TypePattern {
     }
 
     @Override
-    public String getJavaProperty() {
-        return String.format(JAVA_PROPERTY, name);
+    public JavaField getJavaField() {
+        return new JavaField(name, "Comp3V9", "");
     }
 }

@@ -1,8 +1,11 @@
-package io.ms.tool.copybookconverter.core;
+package io.ms.tool.copybookconverter.typepattern;
+
+import io.ms.tool.copybookconverter.export.java.IJavaExport;
+import io.ms.tool.copybookconverter.export.java.model.JavaField;
 
 import java.util.List;
 
-public class BigDecimalTypePattern implements TypePattern {
+public class BigDecimalTypePattern implements TypePattern, IJavaExport {
 
     private String name;
     private Integer length;
@@ -30,8 +33,7 @@ public class BigDecimalTypePattern implements TypePattern {
     }
 
     @Override
-    public String getJavaProperty() {
-        return String.format(JAVA_PROPERTY, name);
+    public JavaField getJavaField() {
+        return new JavaField(name, "BigDecimal", "");
     }
-
 }

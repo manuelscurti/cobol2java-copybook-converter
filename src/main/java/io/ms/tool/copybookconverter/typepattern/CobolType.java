@@ -1,4 +1,4 @@
-package io.ms.tool.copybookconverter.core;
+package io.ms.tool.copybookconverter.typepattern;
 
 public enum CobolType {
     COMP3V9_1("S9(%)V9(%) USAGE COMP-3", Comp3V9TypePattern.class),

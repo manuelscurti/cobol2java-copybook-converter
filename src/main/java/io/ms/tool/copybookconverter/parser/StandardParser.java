@@ -4,7 +4,7 @@ import io.ms.tool.copybookconverter.parser.model.GroupField;
 import io.ms.tool.copybookconverter.parser.model.PicField;
 import io.ms.tool.copybookconverter.parser.model.RawField;
 import io.ms.tool.copybookconverter.util.CobolUtils;
-import io.ms.tool.copybookconverter.util.StringUtils;
+import io.ms.tool.copybookconverter.util.ParsingUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -105,16 +105,16 @@ public class StandardParser implements CopybookParser {
         String[] tokens = line.split(separator);
 
         //search for the language-specific keywords "PIC" or "OCCURS"
-        int picPos = StringUtils.searchFirstOccurrence(tokens, "PIC");
-        int occursPos = StringUtils.searchFirstOccurrence(tokens, "OCCURS");
+        int picPos = ParsingUtils.searchFirstOccurrence(tokens, "PIC");
+        int occursPos = ParsingUtils.searchFirstOccurrence(tokens, "OCCURS");
 
-        if (picPos != StringUtils.NOT_FOUND && occursPos != StringUtils.NOT_FOUND) {
+        if (picPos != ParsingUtils.NOT_FOUND && occursPos != ParsingUtils.NOT_FOUND) {
             //CASE 5
             field = composeGroupListField(tokens, picPos, occursPos);
-        } else if (picPos != StringUtils.NOT_FOUND) {
+        } else if (picPos != ParsingUtils.NOT_FOUND) {
             //CASE 1 OR 2
             field = composePictureField(tokens, picPos);
-        } else if (occursPos != StringUtils.NOT_FOUND) {
+        } else if (occursPos != ParsingUtils.NOT_FOUND) {
             //CASE 4
             field = composeListField(tokens, occursPos);
         } else {

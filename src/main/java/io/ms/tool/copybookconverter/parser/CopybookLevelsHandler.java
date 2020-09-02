@@ -1,5 +1,6 @@
 package io.ms.tool.copybookconverter.parser;
 
+import io.ms.tool.copybookconverter.exception.ParsingException;
 import io.ms.tool.copybookconverter.parser.model.GroupField;
 import io.ms.tool.copybookconverter.parser.model.RawField;
 
