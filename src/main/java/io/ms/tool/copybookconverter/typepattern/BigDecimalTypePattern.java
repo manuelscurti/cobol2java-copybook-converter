@@ -1,11 +1,13 @@
 package io.ms.tool.copybookconverter.typepattern;
 
+import io.ms.tool.copybookconverter.export.beanio.IBeanIOExport;
+import io.ms.tool.copybookconverter.export.beanio.model.BeanField;
 import io.ms.tool.copybookconverter.export.java.IJavaExport;
 import io.ms.tool.copybookconverter.export.java.model.JavaField;
 
 import java.util.List;
 
-public class BigDecimalTypePattern implements TypePattern, IJavaExport {
+public class BigDecimalTypePattern implements TypePattern, IJavaExport, IBeanIOExport {
 
     private String name;
     private Integer length;
@@ -28,12 +30,15 @@ public class BigDecimalTypePattern implements TypePattern, IJavaExport {
     }
 
     @Override
-    public String getBeanIOMap() {
-        return String.format(BEANIO_PATTERN, name, length);
-    }
-
-    @Override
     public JavaField getJavaField() {
         return new JavaField(name, "BigDecimal", "");
     }
+
+    @Override
+    public BeanField getBeanIOField() {
+        return new BeanField(name, length, null, null, null, null, null);
+    }
+
+
+
 }

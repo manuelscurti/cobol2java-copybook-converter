@@ -2,6 +2,7 @@ package io.ms.tool.copybookconverter;
 
 import io.ms.tool.copybookconverter.converter.CopybookConverter;
 import io.ms.tool.copybookconverter.converter.StandardConverter;
+import io.ms.tool.copybookconverter.export.beanio.BeanIOExport;
 import io.ms.tool.copybookconverter.export.java.JavaExport;
 import io.ms.tool.copybookconverter.parser.CopybookParser;
 import io.ms.tool.copybookconverter.parser.StandardParser;
@@ -32,14 +33,17 @@ public class CopybookConverterApplication {
 			CopybookParser parser = event.getApplicationContext().getBean(StandardParser.class);
 			CopybookConverter converter = event.getApplicationContext().getBean(StandardConverter.class);
 			JavaExport javaExporter = event.getApplicationContext().getBean(JavaExport.class);
+			BeanIOExport beanIOExporter = event.getApplicationContext().getBean(BeanIOExport.class);
 
 			try {
-				List<RawField> rawFields = parser.parse("src/main/resources/AN000233_full.cpy");
+				List<RawField> rawFields = parser.parse("src/main/resources/AN000233_hierarchy.cpy");
 				String xmlCopybook = converter.convert(rawFields, "AN000233");
 
 				String javaClasses = javaExporter.export(xmlCopybook);
+				String beanIOstream = beanIOExporter.export(xmlCopybook);
 
 				System.out.println(javaClasses);
+				System.out.println("\n"+beanIOstream);
 
 			} catch (IOException e) {
 				e.printStackTrace();

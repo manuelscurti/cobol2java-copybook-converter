@@ -1,11 +1,13 @@
 package io.ms.tool.copybookconverter.typepattern;
 
+import io.ms.tool.copybookconverter.export.beanio.IBeanIOExport;
+import io.ms.tool.copybookconverter.export.beanio.model.BeanField;
 import io.ms.tool.copybookconverter.export.java.IJavaExport;
 import io.ms.tool.copybookconverter.export.java.model.JavaField;
 
 import java.util.List;
 
-public class StringTypePattern implements TypePattern, IJavaExport {
+public class StringTypePattern implements TypePattern, IJavaExport, IBeanIOExport {
 
     private String name;
     private Integer length;
@@ -29,11 +31,6 @@ public class StringTypePattern implements TypePattern, IJavaExport {
     }
 
     @Override
-    public String getBeanIOMap() {
-        return String.format(BEANIO_PATTERN, name, length);
-    }
-
-    @Override
     public JavaField getJavaField() {
         String javaType;
         if (length == 1) {
@@ -43,5 +40,10 @@ public class StringTypePattern implements TypePattern, IJavaExport {
         }
 
         return new JavaField(name, javaType, "");
+    }
+
+    @Override
+    public BeanField getBeanIOField() {
+        return new BeanField(name, length, null, null, null, null, null);
     }
 }

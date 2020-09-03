@@ -1,47 +1,67 @@
 package io.ms.tool.copybookconverter.export.beanio.model;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.*;
 
-@XmlRootElement(name = "segment")
+import java.util.List;
+
+@XmlRootElement(name="segment")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BeanSegment {
+@XmlType(propOrder={"name", "classRef", "collection", "occursRef", "minOccurs", "maxOccurs", "fields"})
+public class BeanSegment extends BeanItem {
 
     @XmlAttribute
-    private String name;
+    private String collection; //value: list
     @XmlAttribute
-    private String collection;
+    private  String classRef;
     @XmlAttribute
     private String occursRef;
     @XmlAttribute
     private Integer minOccurs;
     @XmlAttribute
     private Integer maxOccurs;
-    @XmlAttribute
-    private String classRef;
+
+    @XmlElements({
+            @XmlElement(name = "field", type = BeanField.class),
+            @XmlElement(name = "segment", type = BeanSegment.class)
+    })
+    private List<BeanItem> fields;
 
     public BeanSegment() {
     }
 
-    public BeanSegment(String name, String collection, String occursRef, String classRef) {
-        this.name = name;
+    public BeanSegment(String name, String classRef, List<BeanItem> fields) {
+        super(name);
+        this.classRef = classRef;
+        this.fields = fields;
+    }
+
+    public BeanSegment(String name, String collection, String occursRef, String classRef, List<BeanItem> fields) {
+        super(name);
         this.collection = collection;
         this.occursRef = occursRef;
         this.classRef = classRef;
+        this.fields = fields;
     }
 
-    public BeanSegment(String name, String collection, Integer minOccurs, Integer maxOccurs, String classRef) {
-        this.name = name;
+    public BeanSegment(String name, String collection, Integer minOccurs, Integer maxOccurs, String classRef, List<BeanItem> fields) {
+        super(name);
         this.collection = collection;
         this.minOccurs = minOccurs;
         this.maxOccurs = maxOccurs;
         this.classRef = classRef;
+        this.fields = fields;
+    }
+
+    public void insertField(BeanItem field) {
+        fields.add(field);
+    }
+
+    public List<BeanItem> getFields() {
+        return fields;
     }
 
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     public String getCollection() {

@@ -3,7 +3,7 @@ package io.ms.tool.copybookconverter.util;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class CopybookPrinter extends OutputStream {
+public class JaxbPrinter extends OutputStream {
     StringBuilder strBuilder = new StringBuilder();
 
     @Override

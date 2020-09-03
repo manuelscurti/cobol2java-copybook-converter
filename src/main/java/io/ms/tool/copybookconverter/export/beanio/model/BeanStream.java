@@ -2,7 +2,9 @@ package io.ms.tool.copybookconverter.export.beanio.model;
 
 import jakarta.xml.bind.annotation.*;
 
-@XmlRootElement(name = "stream")
+import java.util.List;
+
+@XmlRootElement(name="stream")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BeanStream {
 
@@ -12,15 +14,15 @@ public class BeanStream {
     private String format;
 
     @XmlElement(name = "record")
-    private BeanRecord record;
+    private List<BeanRecord> records;
 
     public BeanStream() {
     }
 
-    public BeanStream(String name, String format, BeanRecord record) {
+    public BeanStream(String name, String format, List<BeanRecord> records) {
         this.name = name;
         this.format = format;
-        this.record = record;
+        this.records = records;
     }
 
     public String getName() {
@@ -31,7 +33,11 @@ public class BeanStream {
         return format;
     }
 
-    public BeanRecord getRecord() {
-        return record;
+    public List<BeanRecord> getRecords() {
+        return records;
+    }
+
+    public void insertRecord(BeanRecord record) {
+        records.add(record);
     }
 }

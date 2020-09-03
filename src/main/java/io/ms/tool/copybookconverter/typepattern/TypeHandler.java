@@ -11,12 +11,12 @@ import java.util.Set;
 @Component
 public class TypeHandler {
 
-    private Map<String, TypePattern> conversionMap;
+    private final Map<String, TypePattern> conversionMap;
     static final String DEFAULT_PATTERN = CobolType.STRING_1.getPattern();
 
     //STATS
     private int failedRecognition = 0;
-    private Set<String> nonRecognizedFieldsDetailed;
+    private final Set<String> nonRecognizedFieldsDetailed;
 
     public TypeHandler() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         conversionMap = new HashMap<>();

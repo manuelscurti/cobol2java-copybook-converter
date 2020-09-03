@@ -6,7 +6,7 @@ import io.ms.tool.copybookconverter.export.CopybookExport;
 import io.ms.tool.copybookconverter.parser.model.GroupField;
 import io.ms.tool.copybookconverter.parser.model.PicField;
 import io.ms.tool.copybookconverter.parser.model.RawField;
-import io.ms.tool.copybookconverter.util.CopybookPrinter;
+import io.ms.tool.copybookconverter.util.JaxbPrinter;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -33,7 +33,7 @@ public class StandardConverter implements CopybookConverter {
             JAXBContext jaxbContext = JAXBContext.newInstance(Copybook.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            CopybookPrinter printer = new CopybookPrinter();
+            JaxbPrinter printer = new JaxbPrinter();
             jaxbMarshaller.marshal(copybook, printer);
 
             xmlString = printer.getString();

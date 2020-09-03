@@ -1,19 +1,18 @@
 package io.ms.tool.copybookconverter.export.beanio.model;
 
+import jakarta.xml.bind.annotation.*;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "field")
+@XmlRootElement(name="field")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BeanField {
+@XmlType(propOrder={"name", "length", "typeHandler", "format", "justify", "padding", "ignore"})
+public class BeanField extends BeanItem {
 
-    @XmlAttribute
-    private String name;
     @XmlAttribute
     private Integer length;
+    @XmlAttribute
+    private String typeHandler;
+    @XmlAttribute
+    private String format;
     @XmlAttribute
     private String ignore;
     @XmlAttribute
@@ -24,16 +23,26 @@ public class BeanField {
     public BeanField() {
     }
 
-    public BeanField(String name, Integer length, String ignore, String justify, String padding) {
-        this.name = name;
+    public BeanField(String name, Integer length, String typeHandler, String format, String ignore, String justify, String padding) {
+        super(name);
         this.length = length;
+        this.typeHandler = typeHandler;
+        this.format = format;
         this.ignore = ignore;
         this.justify = justify;
         this.padding = padding;
     }
 
     public String getName() {
-        return name;
+        return super.getName();
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public String getTypeHandler() {
+        return typeHandler;
     }
 
     public Integer getLength() {

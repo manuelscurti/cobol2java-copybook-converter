@@ -1,11 +1,13 @@
 package io.ms.tool.copybookconverter.typepattern;
 
+import io.ms.tool.copybookconverter.export.beanio.IBeanIOExport;
+import io.ms.tool.copybookconverter.export.beanio.model.BeanField;
 import io.ms.tool.copybookconverter.export.java.IJavaExport;
 import io.ms.tool.copybookconverter.export.java.model.JavaField;
 
 import java.util.List;
 
-public class Comp3VTypePattern implements TypePattern, IJavaExport {
+public class Comp3VTypePattern implements TypePattern, IJavaExport, IBeanIOExport {
 
     private String name;
     private Integer packedSize; //length of field
@@ -31,12 +33,12 @@ public class Comp3VTypePattern implements TypePattern, IJavaExport {
     }
 
     @Override
-    public String getBeanIOMap() {
-        return String.format(BEANIO_PATTERN, name, packedSize, BEANIO_CUSTOM_TYPEHANDLER, digits);
+    public JavaField getJavaField() {
+        return new JavaField(name, "Comp3", "");
     }
 
     @Override
-    public JavaField getJavaField() {
-        return new JavaField(name, "Comp3", "");
+    public BeanField getBeanIOField() {
+        return new BeanField(name, packedSize, BEANIO_CUSTOM_TYPEHANDLER, digits.toString(), null, null, null);
     }
 }
