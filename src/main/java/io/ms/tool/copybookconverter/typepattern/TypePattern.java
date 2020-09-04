@@ -6,4 +6,6 @@ public interface TypePattern {
 
     void setup(String name, List<String> params);
 
+    int getFieldLength();
+
 }

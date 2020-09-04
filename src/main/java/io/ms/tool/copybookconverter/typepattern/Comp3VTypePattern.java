@@ -33,6 +33,11 @@ public class Comp3VTypePattern implements TypePattern, IJavaExport, IBeanIOExpor
     }
 
     @Override
+    public int getFieldLength() {
+        return packedSize;
+    }
+
+    @Override
     public JavaField getJavaField() {
         return new JavaField(name, "Comp3", "");
     }

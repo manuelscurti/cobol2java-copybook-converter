@@ -10,8 +10,8 @@ public class BeanRecord {
 
     @XmlAttribute
     String name;
-    @XmlAttribute
-    String classPackage;
+    @XmlAttribute(name = "class")
+    String classRef;
 
     @XmlElements({
             @XmlElement(name = "field", type = BeanField.class),
@@ -22,9 +22,9 @@ public class BeanRecord {
     public BeanRecord() {
     }
 
-    public BeanRecord(String name, String classPackage, List<BeanItem> fields) {
+    public BeanRecord(String name, String classRef, List<BeanItem> fields) {
         this.name = name;
-        this.classPackage = classPackage;
+        this.classRef = classRef;
         this.fields = fields;
     }
 
@@ -36,8 +36,8 @@ public class BeanRecord {
         return name;
     }
 
-    public String getClassPackage() {
-        return classPackage;
+    public String getClassRef() {
+        return classRef;
     }
 
     public List<BeanItem> getFields() {

@@ -32,6 +32,11 @@ public class NumberTypePattern implements TypePattern, IJavaExport, IBeanIOExpor
     }
 
     @Override
+    public int getFieldLength() {
+        return length;
+    }
+
+    @Override
     public JavaField getJavaField() {
         String javaType;
         if (length >= 1 && length <= 4) {

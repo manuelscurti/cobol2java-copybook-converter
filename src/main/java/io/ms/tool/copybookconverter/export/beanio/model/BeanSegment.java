@@ -11,8 +11,8 @@ public class BeanSegment extends BeanItem {
 
     @XmlAttribute
     private String collection; //value: list
-    @XmlAttribute
-    private  String classRef;
+    @XmlAttribute(name = "class")
+    private String classRef;
     @XmlAttribute
     private String occursRef;
     @XmlAttribute

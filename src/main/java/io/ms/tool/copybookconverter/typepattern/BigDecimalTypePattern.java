@@ -30,6 +30,11 @@ public class BigDecimalTypePattern implements TypePattern, IJavaExport, IBeanIOE
     }
 
     @Override
+    public int getFieldLength() {
+        return length;
+    }
+
+    @Override
     public JavaField getJavaField() {
         return new JavaField(name, "BigDecimal", "");
     }

@@ -31,6 +31,11 @@ public class CompTypePattern implements TypePattern, IJavaExport, IBeanIOExport 
     }
 
     @Override
+    public int getFieldLength() {
+        return packedSize;
+    }
+
+    @Override
     public JavaField getJavaField() {
         return new JavaField(name, "Comp", "");
     }

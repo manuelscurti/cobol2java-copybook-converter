@@ -1,5 +1,6 @@
 package io.ms.tool.copybookconverter.export.beanio.model;
 
+import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.annotation.*;
 
 @XmlRootElement(name="field")
@@ -60,5 +61,16 @@ public class BeanField extends BeanItem {
     public String getPadding() {
         return padding;
     }
+
+//    // Invoked by Marshaller after it has created an instance of this object.
+//    boolean beforeMarshal(Marshaller marshaller) {
+//        System.out.println("Before Marshaller Callback");
+//        return true;
+//    }
+//
+//    // Invoked by Marshaller after it has marshalled all properties of this object.
+//    void afterMarshal(Marshaller marshaller) {
+//        System.out.println("After Marshaller Callback");
+//    }
 
 }

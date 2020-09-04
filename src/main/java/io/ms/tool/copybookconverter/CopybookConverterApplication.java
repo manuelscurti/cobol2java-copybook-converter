@@ -36,7 +36,7 @@ public class CopybookConverterApplication {
 			BeanIOExport beanIOExporter = event.getApplicationContext().getBean(BeanIOExport.class);
 
 			try {
-				List<RawField> rawFields = parser.parse("src/main/resources/AN000233_hierarchy.cpy");
+				List<RawField> rawFields = parser.parse("src/main/resources/AN000233_full.cpy");
 				String xmlCopybook = converter.convert(rawFields, "AN000233");
 
 				String javaClasses = javaExporter.export(xmlCopybook);

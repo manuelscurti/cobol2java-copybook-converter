@@ -21,6 +21,11 @@ public class FillerTypePattern implements TypePattern, IBeanIOExport {
     }
 
     @Override
+    public int getFieldLength() {
+        return length;
+    }
+
+    @Override
     public BeanField getBeanIOField() {
         return new BeanField(name, length, null, null, "true", null, null);
     }
