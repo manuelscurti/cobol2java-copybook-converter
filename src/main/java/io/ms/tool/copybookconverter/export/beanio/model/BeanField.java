@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 
 @XmlRootElement(name="field")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder={"name", "length", "typeHandler", "format", "justify", "padding", "ignore"})
+@XmlType(propOrder={"name", "length", "typeHandler", "format", "justify", "padding", "ignore", "defaultValue"})
 public class BeanField extends BeanItem {
 
     @XmlAttribute
@@ -20,11 +20,13 @@ public class BeanField extends BeanItem {
     private String justify;
     @XmlAttribute
     private String padding;
+    @XmlAttribute(name = "default")
+    private String defaultValue;
 
     public BeanField() {
     }
 
-    public BeanField(String name, Integer length, String typeHandler, String format, String ignore, String justify, String padding) {
+    public BeanField(String name, Integer length, String typeHandler, String format, String ignore, String justify, String padding, String defaultValue) {
         super(name);
         this.length = length;
         this.typeHandler = typeHandler;
@@ -32,6 +34,7 @@ public class BeanField extends BeanItem {
         this.ignore = ignore;
         this.justify = justify;
         this.padding = padding;
+        this.defaultValue = defaultValue;
     }
 
     public String getName() {
@@ -62,15 +65,8 @@ public class BeanField extends BeanItem {
         return padding;
     }
 
-//    // Invoked by Marshaller after it has created an instance of this object.
-//    boolean beforeMarshal(Marshaller marshaller) {
-//        System.out.println("Before Marshaller Callback");
-//        return true;
-//    }
-//
-//    // Invoked by Marshaller after it has marshalled all properties of this object.
-//    void afterMarshal(Marshaller marshaller) {
-//        System.out.println("After Marshaller Callback");
-//    }
+    public String getDefaultValue() {
+        return defaultValue;
+    }
 
 }

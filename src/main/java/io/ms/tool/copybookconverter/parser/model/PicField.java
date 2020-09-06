@@ -13,12 +13,14 @@ public class PicField extends RawField {
 
     String typePattern;
     List<String> params;
+    String defaultValue;
     boolean isFiller;
 
-    public PicField(String originalLine, Integer level, String name, String comment, String typePattern, List<String> params, boolean isFiller) {
+    public PicField(String originalLine, Integer level, String name, String comment, String typePattern, List<String> params, String defaultValue, boolean isFiller) {
         super(originalLine, level, name, comment);
         this.typePattern = typePattern;
         this.params = params;
+        this.defaultValue = defaultValue;
         this.isFiller = isFiller;
     }
 
@@ -44,5 +46,9 @@ public class PicField extends RawField {
 
     public void setFiller(boolean filler) {
         isFiller = filler;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
     }
 }

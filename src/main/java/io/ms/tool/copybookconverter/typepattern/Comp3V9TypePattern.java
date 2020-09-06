@@ -13,6 +13,9 @@ public class Comp3V9TypePattern implements TypePattern, IJavaExport, IBeanIOExpo
     private Integer packedSize; //length of field
     private Integer integerPlaces; //length of integer part
     private Integer decimalPlaces; //length of decimal part
+    private String comment;
+    private String defaultValue;
+
     private static final int NUM_REQUIRED_PARAMS = 2;
 
     private static final String JAVA_PROPERTY = "Comp3V9 %s;";
@@ -23,7 +26,7 @@ public class Comp3V9TypePattern implements TypePattern, IJavaExport, IBeanIOExpo
     }
 
     @Override
-    public void setup(String name, List<String> params) {
+    public void setup(String name, List<String> params, String comment, String defaultValue) {
         if (params.size() != NUM_REQUIRED_PARAMS) {
             throw new UnsupportedOperationException("Comp3V9TypePattern must receive 2 parameters");
         }
@@ -33,6 +36,8 @@ public class Comp3V9TypePattern implements TypePattern, IJavaExport, IBeanIOExpo
         this.decimalPlaces = Integer.parseInt(params.get(1));
         int sum = this.integerPlaces + this.decimalPlaces;
         this.packedSize = (sum % 2) == 0 ? (sum + 2)/2 : (sum + 1)/2;
+        this.comment = comment;
+        this.defaultValue = defaultValue;
     }
 
     @Override
@@ -49,6 +54,6 @@ public class Comp3V9TypePattern implements TypePattern, IJavaExport, IBeanIOExpo
     public BeanField getBeanIOField() {
         String format = integerPlaces.toString()+","+decimalPlaces.toString();
 
-        return new BeanField(name, packedSize, BEANIO_CUSTOM_TYPEHANDLER, format, null, null, null);
+        return new BeanField(name, packedSize, BEANIO_CUSTOM_TYPEHANDLER, format, null, null, null, defaultValue);
     }
 }

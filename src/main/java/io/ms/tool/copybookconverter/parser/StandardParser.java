@@ -3,6 +3,7 @@ package io.ms.tool.copybookconverter.parser;
 import io.ms.tool.copybookconverter.parser.model.GroupField;
 import io.ms.tool.copybookconverter.parser.model.PicField;
 import io.ms.tool.copybookconverter.parser.model.RawField;
+import io.ms.tool.copybookconverter.util.CobolKeyword;
 import io.ms.tool.copybookconverter.util.CobolUtils;
 import io.ms.tool.copybookconverter.util.ParsingUtils;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,7 @@ import java.util.regex.Pattern;
 
 /**
  * Standard copybook parser
- * It does not provide any extra functionality such as: smart variable naming
- *
- *
- *
+ * @author m.scurti
  */
 @Component
 public class StandardParser implements CopybookParser {
@@ -29,6 +27,7 @@ public class StandardParser implements CopybookParser {
 
     //KNOWN VALUES
     private static final int MINIMUM_TOKEN_NUMBER = 2; //to be a valid candidate to become a field
+    private static final String SPLIT_CHARACTER = ","; //used to split the line into tokens
 
     @Override
     public List<RawField> parse(String filepath) throws IOException {
@@ -39,22 +38,18 @@ public class StandardParser implements CopybookParser {
 
         String line;
         while ((line = reader.readLine()) != null) {
-            RawField rawField = preprocess(line);
+            String[] tokens = preprocess(line); //preprocessing
+
+            RawField rawField = matchPattern(line, tokens); //information extraction
 
             if (rawField != null) {
-                levelsHandler.addField(rawField);
+                levelsHandler.addField(rawField); //hierarchy preservation
             }
         }
 
-        List<RawField> rawFields = levelsHandler.getParsedFields();
-
-        System.out.println("FIELDS DETECTED: "+stats.getTotalDetectedFields());
-        System.out.println("DISCARDED LINES: ");
-        System.out.println(stats.getDiscardedLines());
-
         reader.close();
 
-        return rawFields;
+        return levelsHandler.getParsedFields();
     }
 
     @Override
@@ -62,7 +57,7 @@ public class StandardParser implements CopybookParser {
         return stats;
     }
 
-    private RawField preprocess(String line) {
+    private String[] preprocess(String line) {
         String proc0 = line.trim();
 
         if (proc0.isEmpty()) {
@@ -76,37 +71,40 @@ public class StandardParser implements CopybookParser {
 
         stats.newDetectedFields(); //increment internal counter
 
-        String proc1 = proc0.replaceAll("\\s+", ","); //replace all white spaces with a single comma
-        String[] tokens = proc1.split(","); //split line into tokens
+        String proc1 = proc0.replaceAll("\\s+", SPLIT_CHARACTER); //replace all white spaces with a single comma
+        String[] tokens = proc1.split(SPLIT_CHARACTER); //split line into tokens
 
         if (tokens.length < MINIMUM_TOKEN_NUMBER) { //cobol fields are defined by at least 3 tokens, e.g. 05 NAME PIC X(3)
             stats.insertDiscardedLine(line);
             return null;
         }
 
-
-        return patternMatcher(proc1, ",");
+        return tokens;
     }
 
     /**
-     *  * formats:
-     *  CASE 1* [level] [field name] PIC [type].                        --supported
-     *  CASE 2* [level] FILLER PIC X([num]).                            --supported
-     *  CASE 3* [level] [field name].                                   --supported
-     *  CASE 4* [level] [field name] OCCURS [number of reps].           --supported
-     *  CASE 5* [level] [field name] OCCURS [number of reps] PIC [type] --supported
-     *  *
-     *  * minimum number of tokens to be a valid candidate: 2
-     * @param line
-     * @param separator
+     * Recognizes the pattern inside a line of the copybook
+     * FORMATS:
+     * CASE 1: [level] [field name] PIC [type].                                             --supported
+     * CASE 2: [level] FILLER PIC X([num]).                                                 --supported
+     * CASE 3: [level] [field name].                                                        --supported
+     * CASE 4: [level] [field name] OCCURS [number of reps].                                --supported
+     * CASE 5: [level] [field name] OCCURS [number of reps] PIC [type]                      --supported
+     * CASE 6: [level] [field name] PIC [type] VALUE [init value]                           --supported
+     * CASE 7: [level] [field name] OCCURS [number of reps] PIC [type] VALUE [init value]   --supported
+     * CASE 8: [level] [field name] OCCURS [min number] TO [max number] DEPENDING ON [field name ref]
+     *
+     * minimum number of tokens to be a valid candidate: 2
+     * @param tokens - the input line splitted into tokens
      */
-    private RawField patternMatcher(String line, String separator) {
+    private RawField matchPattern(String originalLine, String[] tokens) {
+        if (tokens == null) return null;
+
         RawField field;
-        String[] tokens = line.split(separator);
 
         //search for the language-specific keywords "PIC" or "OCCURS"
-        int picPos = ParsingUtils.searchFirstOccurrence(tokens, "PIC");
-        int occursPos = ParsingUtils.searchFirstOccurrence(tokens, "OCCURS");
+        int picPos = ParsingUtils.searchFirstOccurrence(tokens, CobolKeyword.PIC.name());
+        int occursPos = ParsingUtils.searchFirstOccurrence(tokens, CobolKeyword.OCCURS.name());
 
         if (picPos != ParsingUtils.NOT_FOUND && occursPos != ParsingUtils.NOT_FOUND) {
             //CASE 5
@@ -123,29 +121,44 @@ public class StandardParser implements CopybookParser {
         }
 
         if (field == null) {
-            stats.insertDiscardedLine(line);
+            stats.insertDiscardedLine(originalLine);
             return null;
         }
 
-        field.setOriginalLine(line);
+        field.setOriginalLine(originalLine);
 
         return field;
     }
 
+    /**
+     * Parsing method for text lines containing a PICTURE definition
+     * Cases ID: 1, 2
+     * @param tokens - text line splitted into tokens
+     * @param indexOfPic - index of the PIC keyword inside the tokens vector
+     * @return a structured representation of the text line
+     */
     private PicField composePictureField(String[] tokens, int indexOfPic) {
-        Integer level = Integer.parseInt(tokens[indexOfPic - 2]);
-        String fieldName = tokens[indexOfPic - 1].replaceAll("[:-]", "").toLowerCase();
-        String typeDefinition = reconstructTypeField(tokens, indexOfPic);
-        List<String> params = parseFieldParams(typeDefinition);
-        String typeDefinitionPattern = extractPattern(typeDefinition);
+        Integer level = Integer.parseInt(tokens[indexOfPic - 2]); //retrieves the [level] token
+        String fieldName = tokens[indexOfPic - 1].replaceAll("[:-]", "").toLowerCase(); //[field name] token
+        String typeDefinition = reconstructTypeField(tokens, indexOfPic); //[type] of the field
+        List<String> params = parseFieldParams(typeDefinition); //parses the parameters of the picture field
+        String typeDefinitionPattern = extractPattern(typeDefinition); //gets the standardized format of the typeDefinition
+
         boolean isFiller = CobolUtils.isFiller(fieldName);
         if (isFiller) {
             stats.newFillerField();
         }
 
-        return new PicField(null, level, fieldName, null, typeDefinitionPattern, params, isFiller);
+        return new PicField(null, level, fieldName, null, typeDefinitionPattern, params, getDefaultValue(tokens),isFiller);
     }
 
+    /**
+     * Parsing method for text lines containing an OCCURS definition
+     * Cases ID: 4
+     * @param tokens - text line splitted into tokens
+     * @param indexOfOccurs - index of the PIC keyword inside the tokens vector
+     * @return a structured representation of the text line
+     */
     private GroupField composeListField(String[] tokens, int indexOfOccurs) {
         Integer level = Integer.parseInt(tokens[indexOfOccurs - 2]);
         String fieldName = tokens[indexOfOccurs - 1].replaceAll("[:-]", "").toLowerCase();
@@ -154,6 +167,13 @@ public class StandardParser implements CopybookParser {
         return new GroupField(null, level, fieldName, null, repetitions);
     }
 
+    /**
+     * Parsing method for text lines containing an OCCURS and PICTURE definition
+     * Cases ID: 5
+     * @param tokens - text line splitted into tokens
+     * @param indexOfOccurs - index of the PIC keyword inside the tokens vector
+     * @return a structured representation of the text line
+     */
     private GroupField composeGroupListField(String[] tokens, int indexOfPic, int indexOfOccurs) {
         Integer level = Integer.parseInt(tokens[indexOfOccurs - 2]);
         String fieldName = tokens[indexOfOccurs - 1].replaceAll("[:-]", "").toLowerCase();
@@ -166,16 +186,16 @@ public class StandardParser implements CopybookParser {
         boolean isFiller = CobolUtils.isFiller(fieldName);
 
         GroupField group = new GroupField(null, level, fieldName, null, repetitions);
-        group.insertSubfield(new PicField(null, level, fieldName, null, typeDefinitionPattern, params, isFiller));
+        group.insertSubfield(new PicField(null, level, fieldName, null, typeDefinitionPattern, params, getDefaultValue(tokens), isFiller));
 
         return group;
     }
 
     /**
-     * This method assumes that a group field has a name composed only by:
-     * numbers,letters and eventually "-", ending the whole name with a single dot.
-     * @param tokens
-     * @return
+     * Parsing method for text lines containing NO PIC and NO OCCURS definition
+     * Cases ID: 3
+     * @param tokens - text line splitted into tokens
+     * @return a structured representation of the text line
      */
     private GroupField composeGroupField(String[] tokens) {
         int vectorLength = tokens.length;
@@ -191,17 +211,23 @@ public class StandardParser implements CopybookParser {
         return new GroupField(null, level, fieldName, null);
     }
 
+    /**
+     *
+     * @param tokens
+     * @param indexOfPic
+     * @return
+     */
     private String reconstructTypeField(String[] tokens, int indexOfPic) {
         StringBuilder typeBuilder = new StringBuilder();
 
         //join remaining tokens which define the type of the field
-        for (int i = indexOfPic + 1; i < tokens.length; i++) {
+        for (int i = indexOfPic + 1; i < tokens.length && !tokens[i].equals(CobolKeyword.VALUE.name()); i++) {
             typeBuilder.append(tokens[i]);
             typeBuilder.append(" ");
         }
 
         String _reconstructedType = typeBuilder.toString().trim();
-        String reconstructedType = _reconstructedType.substring(0, _reconstructedType.length() - 1); //removes the dot
+        String reconstructedType = _reconstructedType.replace(".", ""); //removes the dot
         if (!reconstructedType.contains("(")) {
             int fieldLength = reconstructedType.length();
             String standardizedPattern = reconstructedType.replaceAll("(?i)([0-9])\\1{2,}", "$1"); //handling -99999.99999 types
@@ -212,9 +238,9 @@ public class StandardParser implements CopybookParser {
     }
 
     /**
-     * S9(X)V9(Y)
-     * @param type
-     * @return
+     * Takes all numbers between parenthesis. these numbers inside parenthesis represents parameters of the field
+     * @param type - the string containing the type definition
+     * @return list of parameters extracted
      */
     private List<String> parseFieldParams(String type) {
         Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(type);
@@ -227,12 +253,31 @@ public class StandardParser implements CopybookParser {
     }
 
     /**
-     * Replaces every number between parenthesis in order to save the field type in a standard form
+     * Replaces every number between parenthesis in order to recognize the field type in a standard format
      * @param type - type of the field token, extracted from text
      * @return standardized type
      */
     private String extractPattern(String type) {
         return type.replaceAll("(?<=\\().*?(?=\\))", "%");
+    }
+
+
+    /**
+     * Extracts the default value for the field
+     * pattern: VALUE [default value].
+     * @param tokens
+     * @return
+     */
+    private String getDefaultValue(String[] tokens) {
+        int valuePos = ParsingUtils.searchFirstOccurrence(tokens, CobolKeyword.VALUE.name());
+
+        if (valuePos != ParsingUtils.NOT_FOUND) {
+            String _valueToken = tokens[valuePos + 1];
+            String processedToken = _valueToken.replaceAll("'", "").replaceAll("\"", "");
+            return processedToken.substring(0, processedToken.length() - 1); //removes the dot
+        }
+
+        return null;
     }
 
 }

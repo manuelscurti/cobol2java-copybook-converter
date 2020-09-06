@@ -12,6 +12,8 @@ public class CompTypePattern implements TypePattern, IJavaExport, IBeanIOExport 
     private String name;
     private Integer packedSize; //length of field
     private Integer digits;
+    private String comment;
+    private String defaultValue;
     private static final int NUM_REQUIRED_PARAMS = 1;
 
     private static final String JAVA_PROPERTY = "Comp %s;";
@@ -20,7 +22,7 @@ public class CompTypePattern implements TypePattern, IJavaExport, IBeanIOExport 
 
 
     @Override
-    public void setup(String name, List<String> params) {
+    public void setup(String name, List<String> params, String comment, String defaultValue) {
         if (params.size() != NUM_REQUIRED_PARAMS) {
             throw new UnsupportedOperationException("CompTypePattern must receive 1 parameter");
         }
@@ -28,6 +30,8 @@ public class CompTypePattern implements TypePattern, IJavaExport, IBeanIOExport 
         this.name = name;
         this.digits = Integer.parseInt(params.get(0));
         this.packedSize = (digits < 5) ? 2 : (digits < 10) ? 4 : 8;
+        this.comment = comment;
+        this.defaultValue = defaultValue;
     }
 
     @Override
@@ -42,6 +46,6 @@ public class CompTypePattern implements TypePattern, IJavaExport, IBeanIOExport 
 
     @Override
     public BeanField getBeanIOField() {
-        return new BeanField(name, packedSize, BEANIO_CUSTOM_TYPEHANDLER, digits.toString(), null, null, null);
+        return new BeanField(name, packedSize, BEANIO_CUSTOM_TYPEHANDLER, digits.toString(), null, null, null, defaultValue);
     }
 }

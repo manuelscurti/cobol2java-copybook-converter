@@ -11,7 +11,7 @@ import io.ms.tool.copybookconverter.export.beanio.model.BeanStream;
 import io.ms.tool.copybookconverter.typepattern.FillerTypePattern;
 import io.ms.tool.copybookconverter.typepattern.TypeHandler;
 import io.ms.tool.copybookconverter.typepattern.TypePattern;
-import io.ms.tool.copybookconverter.util.JaxbPrinter;
+import io.ms.tool.copybookconverter.util.JAXBPrinter;
 import io.ms.tool.copybookconverter.util.ParsingUtils;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -83,9 +82,8 @@ public class BeanIOExport implements CopybookExport {
                 }
 
                 beanIOExport = (IBeanIOExport) pattern;
-                pattern.setup(fieldName, ParsingUtils.paramsToList(field.getParams()));
+                pattern.setup(fieldName, ParsingUtils.paramsToList(field.getParams()), null, field.getDefaultValue());
                 fieldLengths.add(pattern.getFieldLength());
-
 
                 if (currentSegment != null) {
                     currentSegment.insertField(beanIOExport.getBeanIOField());
@@ -114,10 +112,10 @@ public class BeanIOExport implements CopybookExport {
     }
 
     private String streamToString(BeanStream stream) {
-        JaxbPrinter printer;
+        JAXBPrinter printer;
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(BeanStream.class);
-            printer = new JaxbPrinter();
+            printer = new JAXBPrinter();
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(stream, printer);
@@ -135,13 +133,13 @@ public class BeanIOExport implements CopybookExport {
         String[] lines = xml.split("\n");
         List<String> commentedLines = new ArrayList<>();
 
-        long currentLength = 0;
+        long currentLength = 1;
         int i = 0;
         for (String line : lines) {
             String tmp = line;
             if (line.contains("field") && i < fieldLengths.size()) {
-                currentLength += fieldLengths.get(i);
                 tmp += "\t" + String.format(COMMENT_PATTERN, currentLength);
+                currentLength += fieldLengths.get(i);
                 i++;
             }
             commentedLines.add(tmp);

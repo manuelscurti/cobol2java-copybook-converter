@@ -11,7 +11,7 @@ public class ParsingUtils {
     public static final int NOT_FOUND = -1;
 
     public static int searchFirstOccurrence(String[] vector, String keyword) {
-        for (int i = 0; i < vector.length; i++) {
+          for (int i = 0; i < vector.length; i++) {
             if (vector[i].equals(keyword)) {
                 return i;
             }

@@ -66,7 +66,7 @@ public class JavaExport implements CopybookExport {
                 if (!ParsingUtils.isFiller(field)){
                     TypePattern pattern = typeHandler.getHandler(field.getDefinition());
                     IJavaExport IJavaExport = (IJavaExport) pattern;
-                    pattern.setup(field.getName(), ParsingUtils.paramsToList(field.getParams()));
+                    pattern.setup(field.getName(), ParsingUtils.paramsToList(field.getParams()), null, field.getDefaultValue());
                     currentClass.insertField(IJavaExport.getJavaField());
                 }
             } else if (ParsingUtils.isGroup(field)) {

@@ -17,18 +17,18 @@ public class XmlTest {
     public void testBeanXml() throws JAXBException {
         List<BeanItem> items = new ArrayList<>();
 
-        BeanField fieldA = new BeanField("fieldA", 10, null, null, null, null, null);
-        BeanField fieldB = new BeanField("fieldB", 10, null,null, null, null, null);
-        BeanField fieldC = new BeanField("fieldC", 10, null,null, null, null, null);
+        BeanField fieldA = new BeanField("fieldA", 10, null, null, null, null, null, null);
+        BeanField fieldB = new BeanField("fieldB", 10, null,null, null, null, null, null);
+        BeanField fieldC = new BeanField("fieldC", 10, null,null, null, null, null, null);
 
         items.add(fieldA);
         items.add(fieldB);
         items.add(fieldC);
 
         List<BeanItem> segmentFields = new ArrayList<>();
-        segmentFields.add(new BeanField("fieldA_A", 10, null,null, null, null, null));
-        segmentFields.add(new BeanField("fieldA_B", 10, null,null, null, null, null));
-        segmentFields.add(new BeanField("fieldA_C", 10, null,null, null, null, null));
+        segmentFields.add(new BeanField("fieldA_A", 10, null,null, null, null, null, null));
+        segmentFields.add(new BeanField("fieldA_B", 10, null,null, null, null, null, null));
+        segmentFields.add(new BeanField("fieldA_C", 10, null,null, null, null, null, null));
 
         BeanSegment segment = new BeanSegment("segmentA", "list", 0, 4, "it.cedacri.segmentb", segmentFields);
 

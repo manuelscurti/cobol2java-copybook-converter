@@ -7,6 +7,7 @@ import io.ms.tool.copybookconverter.export.java.JavaExport;
 import io.ms.tool.copybookconverter.parser.CopybookParser;
 import io.ms.tool.copybookconverter.parser.StandardParser;
 import io.ms.tool.copybookconverter.parser.model.RawField;
+import io.ms.tool.copybookconverter.reader.StandardReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -36,14 +37,24 @@ public class CopybookConverterApplication {
 			BeanIOExport beanIOExporter = event.getApplicationContext().getBean(BeanIOExport.class);
 
 			try {
-				List<RawField> rawFields = parser.parse("src/main/resources/AN000233_full.cpy");
-				String xmlCopybook = converter.convert(rawFields, "AN000233");
+				StandardReader reader = new StandardReader("src/main/resources/TE000902_short.cpy");
 
-				String javaClasses = javaExporter.export(xmlCopybook);
-				String beanIOstream = beanIOExporter.export(xmlCopybook);
+				String line;
+				while ((line = reader.readNext()) != null) {
+					System.out.println(line);
+				}
 
-				System.out.println(javaClasses);
-				System.out.println("\n"+beanIOstream);
+//				List<RawField> rawFields = parser.parse("src/main/resources/TE000902_short.cpy");
+//				System.out.println(parser.inspectParser());
+//
+//				String xmlCopybook = converter.convert(rawFields, "TE000902");
+//
+//
+//				String javaClasses = javaExporter.export(xmlCopybook);
+//				String beanIOstream = beanIOExporter.export(xmlCopybook);
+//
+//				System.out.println(javaClasses);
+//				System.out.println("\n"+beanIOstream);
 
 			} catch (IOException e) {
 				e.printStackTrace();

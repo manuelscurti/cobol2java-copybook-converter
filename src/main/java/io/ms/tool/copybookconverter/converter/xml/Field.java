@@ -5,6 +5,9 @@ import jakarta.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a field or a group of fields
+ */
 @XmlRootElement(name = "field")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Field {
@@ -25,6 +28,8 @@ public class Field {
     String ignore;
     @XmlAttribute
     Integer occurs;
+    @XmlAttribute
+    String defaultValue;
 
     List<Field> field = new ArrayList<>();
 
@@ -39,7 +44,7 @@ public class Field {
         this.occurs = occurs;
     }
 
-    public Field(Integer level, String name, String definition, String params, String ignore, String comment) {
+    public Field(Integer level, String name, String definition, String params, String ignore, String comment, String defaultValue) {
         this.h = level;
         this.name = name;
         this.type = "pic";
@@ -47,6 +52,7 @@ public class Field {
         this.params = params;
         this.ignore = ignore;
         this.comment = comment;
+        this.defaultValue = defaultValue;
     }
 
     public Integer getH() {
@@ -123,5 +129,9 @@ public class Field {
 
     public void setField(List<Field> field) {
         this.field = field;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
     }
 }

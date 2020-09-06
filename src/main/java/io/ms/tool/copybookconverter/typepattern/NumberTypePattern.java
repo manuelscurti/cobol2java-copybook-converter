@@ -11,6 +11,8 @@ public class NumberTypePattern implements TypePattern, IJavaExport, IBeanIOExpor
 
     private String name;
     private Integer length;
+    private String comment;
+    private String defaultValue;
     private static final int NUM_REQUIRED_PARAMS = 1;
 
     private static final String JAVA_PROPERTY_SHORT = "Short %s;";
@@ -22,13 +24,15 @@ public class NumberTypePattern implements TypePattern, IJavaExport, IBeanIOExpor
     }
 
     @Override
-    public void setup(String name, List<String> params) {
+    public void setup(String name, List<String> params, String comment, String defaultValue) {
         if (params.size() != NUM_REQUIRED_PARAMS) {
             throw new UnsupportedOperationException("NumberTypePattern must receive 1 parameter");
         }
 
         this.name = name;
         this.length = Integer.parseInt(params.get(0));
+        this.comment = comment;
+        this.defaultValue = defaultValue;
     }
 
     @Override
@@ -51,6 +55,6 @@ public class NumberTypePattern implements TypePattern, IJavaExport, IBeanIOExpor
 
     @Override
     public BeanField getBeanIOField() {
-        return new BeanField(name, length, null, null, null, "right", "0");
+        return new BeanField(name, length, null, null, null, "right", "0", defaultValue);
     }
 }

@@ -4,6 +4,11 @@ import jakarta.xml.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Represents a copybook, parsed from its original text
+ * This object is instantiated by the CopybookParser
+ * and used by other components of the system
+ */
 @XmlRootElement(name="copybook")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Copybook {
