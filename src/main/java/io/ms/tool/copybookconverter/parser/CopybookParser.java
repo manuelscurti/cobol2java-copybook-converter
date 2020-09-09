@@ -1,6 +1,7 @@
 package io.ms.tool.copybookconverter.parser;
 
 import io.ms.tool.copybookconverter.parser.model.RawField;
+import io.ms.tool.copybookconverter.reader.CopybookReader;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface CopybookParser {
 
-    List<RawField> parse(String filepath) throws IOException;
+    List<RawField> parse(CopybookReader reader) throws IOException;
 
     ParserStats inspectParser();
 

@@ -3,6 +3,7 @@ package io.ms.tool.copybookconverter.parser;
 import io.ms.tool.copybookconverter.parser.model.GroupField;
 import io.ms.tool.copybookconverter.parser.model.PicField;
 import io.ms.tool.copybookconverter.parser.model.RawField;
+import io.ms.tool.copybookconverter.reader.CopybookReader;
 import io.ms.tool.copybookconverter.util.CobolKeyword;
 import io.ms.tool.copybookconverter.util.CobolUtils;
 import io.ms.tool.copybookconverter.util.ParsingUtils;
@@ -13,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,14 +32,12 @@ public class StandardParser implements CopybookParser {
     private static final String SPLIT_CHARACTER = ","; //used to split the line into tokens
 
     @Override
-    public List<RawField> parse(String filepath) throws IOException {
+    public List<RawField> parse(CopybookReader reader) throws IOException {
         stats = new ParserStats(); //reset stats
         CopybookLevelsHandler levelsHandler = new CopybookLevelsHandler();
 
-        BufferedReader reader = new BufferedReader(new FileReader(filepath));
-
         String line;
-        while ((line = reader.readLine()) != null) {
+        while ((line = reader.readNext()) != null) {
             String[] tokens = preprocess(line); //preprocessing
 
             RawField rawField = matchPattern(line, tokens); //information extraction
@@ -85,14 +85,16 @@ public class StandardParser implements CopybookParser {
     /**
      * Recognizes the pattern inside a line of the copybook
      * FORMATS:
-     * CASE 1: [level] [field name] PIC [type].                                             --supported
-     * CASE 2: [level] FILLER PIC X([num]).                                                 --supported
-     * CASE 3: [level] [field name].                                                        --supported
-     * CASE 4: [level] [field name] OCCURS [number of reps].                                --supported
-     * CASE 5: [level] [field name] OCCURS [number of reps] PIC [type]                      --supported
-     * CASE 6: [level] [field name] PIC [type] VALUE [init value]                           --supported
-     * CASE 7: [level] [field name] OCCURS [number of reps] PIC [type] VALUE [init value]   --supported
-     * CASE 8: [level] [field name] OCCURS [min number] TO [max number] DEPENDING ON [field name ref]
+     * CASE 1: [level] [field name] PIC [type].                                                        --supported
+     * CASE 2: [level] FILLER PIC X([num]).                                                            --supported
+     * CASE 3: [level] [field name].                                                                   --supported
+     * CASE 4: [level] [field name] OCCURS [number of reps].                                           --supported
+     * CASE 5: [level] [field name] OCCURS [number of reps] PIC [type].                                --supported
+     * CASE 6: [level] [field name] PIC [type] VALUE [init value].                                     --supported
+     * CASE 7: [level] [field name] OCCURS [number of reps] PIC [type] VALUE [init value].             --supported
+     * CASE 8: [level] [field name] OCCURS [number of reps] PIC [type] VALUE ZEROES.                   --
+     * CASE 9: [level] [field name] OCCURS [number of reps] PIC [type] VALUE SPACES.                   --
+     * CASE10: [level] [field name] OCCURS [min number] TO [max number] DEPENDING ON [field name ref]. --
      *
      * minimum number of tokens to be a valid candidate: 2
      * @param tokens - the input line splitted into tokens
@@ -265,19 +267,19 @@ public class StandardParser implements CopybookParser {
     /**
      * Extracts the default value for the field
      * pattern: VALUE [default value].
-     * @param tokens
-     * @return
+     * @param tokens the original line being processed
+     * @return extracted default value for the field
      */
     private String getDefaultValue(String[] tokens) {
         int valuePos = ParsingUtils.searchFirstOccurrence(tokens, CobolKeyword.VALUE.name());
 
-        if (valuePos != ParsingUtils.NOT_FOUND) {
-            String _valueToken = tokens[valuePos + 1];
-            String processedToken = _valueToken.replaceAll("'", "").replaceAll("\"", "");
-            return processedToken.substring(0, processedToken.length() - 1); //removes the dot
+        if (valuePos == ParsingUtils.NOT_FOUND) {
+            return null;
         }
 
-        return null;
+        String _valueToken = tokens[valuePos + 1];
+        String processedToken = _valueToken.replaceAll("'", "").replaceAll("\"", "");
+        return processedToken.substring(0, processedToken.length() - 1); //removes the dot
     }
 
 }

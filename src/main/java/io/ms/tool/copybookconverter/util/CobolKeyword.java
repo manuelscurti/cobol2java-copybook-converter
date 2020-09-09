@@ -4,6 +4,8 @@ public enum CobolKeyword {
 
     PIC,
     VALUE,
-    OCCURS
+    OCCURS,
+    ZEROES,
+    SPACES
 
 }

@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class StandardReader implements CopybookReader {
 
-    private BufferedReader reader;
+    private final BufferedReader reader;
 
     public StandardReader(String filePath) throws FileNotFoundException {
         this.reader = new BufferedReader(new FileReader(filePath));

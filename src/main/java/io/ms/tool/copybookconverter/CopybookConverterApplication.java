@@ -39,22 +39,17 @@ public class CopybookConverterApplication {
 			try {
 				StandardReader reader = new StandardReader("src/main/resources/TE000902_short.cpy");
 
-				String line;
-				while ((line = reader.readNext()) != null) {
-					System.out.println(line);
-				}
+				List<RawField> rawFields = parser.parse(reader);
+				System.out.println(parser.inspectParser());
 
-//				List<RawField> rawFields = parser.parse("src/main/resources/TE000902_short.cpy");
-//				System.out.println(parser.inspectParser());
-//
-//				String xmlCopybook = converter.convert(rawFields, "TE000902");
-//
-//
-//				String javaClasses = javaExporter.export(xmlCopybook);
-//				String beanIOstream = beanIOExporter.export(xmlCopybook);
-//
-//				System.out.println(javaClasses);
-//				System.out.println("\n"+beanIOstream);
+				String xmlCopybook = converter.convert(rawFields, "TE000902");
+
+
+				String javaClasses = javaExporter.export(xmlCopybook);
+				String beanIOstream = beanIOExporter.export(xmlCopybook);
+
+				System.out.println(javaClasses);
+				System.out.println("\n"+beanIOstream);
 
 			} catch (IOException e) {
 				e.printStackTrace();
