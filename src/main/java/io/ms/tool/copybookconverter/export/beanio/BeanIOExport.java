@@ -148,4 +148,25 @@ public class BeanIOExport implements CopybookExport {
         return String.join("\n", commentedLines);
     }
 
+//    private String addComments(Copybook copybook, String xml, List<Integer> fieldLengths) {
+//        String[] lines = xml.split("\n");
+//        List<String> commentedLines = new ArrayList<>();
+//
+//        long currentLength = 1;
+//        int i = 0;
+//
+//        for (String line : lines) {
+//            String tmp = line;
+//            if (line.contains("field") && i < fieldLengths.size()) {
+//                tmp += "\t" + String.format(COMMENT_PATTERN, currentLength);
+//                currentLength += fieldLengths.get(i);
+//                i++;
+//            }
+//            commentedLines.add(tmp);
+//        }
+//
+//        return String.join("\n", commentedLines);
+//    }
+
+
 }

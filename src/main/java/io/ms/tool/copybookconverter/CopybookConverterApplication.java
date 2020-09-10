@@ -37,13 +37,16 @@ public class CopybookConverterApplication {
 			BeanIOExport beanIOExporter = event.getApplicationContext().getBean(BeanIOExport.class);
 
 			try {
-				StandardReader reader = new StandardReader("src/main/resources/TE000902_short.cpy");
+				StandardReader reader = new StandardReader("src/main/resources/AN000233_full.cpy");
 
 				List<RawField> rawFields = parser.parse(reader);
 				System.out.println(parser.inspectParser());
 
-				String xmlCopybook = converter.convert(rawFields, "TE000902");
+				String xmlCopybook = converter.convert(rawFields, "AN000233");
 
+				System.out.println("////////////////////// XML INTERMEDIATE ////////////////////////");
+				System.out.println(xmlCopybook);
+				System.out.println("////////////////////////////////////////////////////////////////\n");
 
 				String javaClasses = javaExporter.export(xmlCopybook);
 				String beanIOstream = beanIOExporter.export(xmlCopybook);

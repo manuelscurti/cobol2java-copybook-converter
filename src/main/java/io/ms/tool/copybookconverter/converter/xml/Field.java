@@ -36,6 +36,13 @@ public class Field {
     public Field() {
     }
 
+    /**
+     * Used by group fields
+     * @param level - field level
+     * @param name - name of the field
+     * @param occurs - number of repetitions of the group field
+     * @param comment - comments of the field
+     */
     public Field(Integer level, String name, Integer occurs, String comment) {
         this.h = level;
         this.name = name;
@@ -44,6 +51,16 @@ public class Field {
         this.occurs = occurs;
     }
 
+    /**
+     * Used by pic fields
+     * @param level - field level
+     * @param name - name of the field
+     * @param definition - type definition
+     * @param params - parameters of type
+     * @param ignore - true if it's filler
+     * @param comment - comments of the field
+     * @param defaultValue - default initialization value
+     */
     public Field(Integer level, String name, String definition, String params, String ignore, String comment, String defaultValue) {
         this.h = level;
         this.name = name;
@@ -133,5 +150,9 @@ public class Field {
 
     public String getDefaultValue() {
         return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 }

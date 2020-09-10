@@ -29,8 +29,9 @@ public class StandardConverter implements CopybookConverter {
     public String convert(List<RawField> fields, String copybookName) {
         Copybook copybook = new Copybook(copybookName, new ArrayList<>());
 
+        BytePosition bytePosition = new BytePosition();
         for (RawField field : fields) {
-            recursiveCopybookToXml(field, copybook.getFields());
+            recursiveCopybookToXml(field, copybook.getFields(), bytePosition);
         }
 
         String xmlString = "";
@@ -60,7 +61,7 @@ public class StandardConverter implements CopybookConverter {
      * @param start - the starting field
      * @param currentGroup - current visiting group
      */
-    private void recursiveCopybookToXml(RawField start, List<Field> currentGroup) {
+    private void recursiveCopybookToXml(RawField start, List<Field> currentGroup, BytePosition currentBytePosition) {
         if ((start instanceof PicField)) {
 //            System.out.println(start.getOriginalLine());
             currentGroup.add(createPicField((PicField) start));
@@ -68,7 +69,7 @@ public class StandardConverter implements CopybookConverter {
 //            System.out.println(start.getOriginalLine());
             Field newGroup = createGroupField((GroupField) start);
             for (RawField field : ((GroupField) start).getSubfields()) {
-                recursiveCopybookToXml(field, newGroup.getField());
+                recursiveCopybookToXml(field, newGroup.getField(), currentBytePosition);
             }
             currentGroup.add(newGroup);
         }
@@ -80,13 +81,14 @@ public class StandardConverter implements CopybookConverter {
      * @return an augmented representation of the PICTURE field
      */
     private Field createPicField(PicField rawField) {
-        Field field2 = new Field(rawField.getLevel(),
-                                    rawField.getName(),
-                                    rawField.getTypePattern(),
-                                    String.join(",", rawField.getParams()),
-                                    null,
-                                    rawField.getComment(),
-                                    rawField.getDefaultValue()
+        Field field2 = new Field(
+                rawField.getLevel(),
+                rawField.getName(),
+                rawField.getTypePattern(),
+                String.join(",", rawField.getParams()),
+                null,
+                rawField.getComment(),
+                rawField.getDefaultValue()
         );
 
         if (rawField.isFiller()) {
