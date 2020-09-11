@@ -12,7 +12,7 @@ public class CopybookReaderTest {
 
     @Test
     public void readTest() throws IOException {
-        CopybookReader reader = new StandardReader("src/main/resources/specific_test.cpy");
+        CopybookReader reader = new StandardReader("src/main/resources/FAXC0001.cpy");
 
         String line;
         while ((line = reader.readNext()) != null) {

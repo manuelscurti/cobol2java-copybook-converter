@@ -11,7 +11,7 @@
       *    DI CUI PARTE VARIABILE  : +6400
       *****************************************************************
       *
-         05  AN0233-STEPEL                     PIC  9(01).
+label    05  AN0233-STEPEL                     PIC  9(01).
          05  AN0233-NRPAG1                     PIC  9(05).
          05  AN0233-NRPAG2                     PIC  9(05).
          05  AN0233-NRPAG3                     PIC  9(05).
