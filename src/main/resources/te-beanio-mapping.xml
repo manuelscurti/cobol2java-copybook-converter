@@ -1,0 +1,468 @@
+<beanio xmlns="http://www.beanio.org/2012/03">
+
+    <typeHandler type="java.time.LocalDate" class="it.cedacri.util.typehandler.LocalDateTypeHandler" />
+    <typeHandler type="java.time.LocalDateTime" class="it.cedacri.util.typehandler.LocalDateTimeTypeHandler" />
+    <typeHandler type="java.time.LocalTime" class="it.cedacri.util.typehandler.LocalTimeTypeHandler" />
+
+    <stream name="TEDATE" format="fixedlength">
+        <record name="TEDATE_RECORD" class="it.cedacri.te.data.model.TE000089">
+            <field name="dataElaborazione" length="8" format="yyyyMMdd" padding=" " required="true" />
+            <field name="oraElaborazione" length="4" format="HHmm" padding=" " required="true" />
+            <field name="dataContabile" length="8" format="yyyyMMdd" padding=" " required="true" />
+            <field name="dataContabileAAGGG" length="5" format="yyDDD" required="true" />
+        </record>
+    </stream>
+
+    <stream name="SEQTBKR" format="fixedlength">
+        <record name="SEQTBKR_RECORD" class="it.cedacri.te.data.model.TE0009KR">
+            <field name="istituto" length="2" padding=" " required="true" />
+            <field name="contratto" length="13" padding=" " required="true" />
+            <field name="statoOperativo" length="1" padding=" " required="true" />
+            <field name="codiceLingua" length="1" padding=" " required="true" />
+            <field name="codiceLinguaComunicazioni" length="1" padding=" " required="true" />
+            <field name="flagUpdateDatiContratto" length="1" padding=" " required="true" />
+            <field name="flagUpdateAreeServizi" length="1" padding=" " required="true" />
+            <field name="flagUpdateRapportiCollegati" length="1" padding=" " required="true" />
+            <field name="flagBloccoVariazioneUpdate" length="1" padding=" " required="true" />
+        </record>
+    </stream>
+
+    <!-- FILE ANOMALI TE00G924 -->
+    <stream name="ANOMALI" format="fixedlength">
+        <record name="ANOMALI_RECORD" class="it.cedacri.te.data.model.TE000905">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="canale" length="4" padding=" " />
+            <field name="codiceSia" length="5" padding=" " />
+            <field name="rapporto" length="13" padding=" " />
+            <field name="dataElaborazione" length="8" format="yyyyMMdd" />
+            <field name="oraElaborazione" length="8" format="HHmmssSS" />
+            <field name="codiceProgramma" length="8" padding=" " />
+            <field name="codiceErrore" length="4" padding=" " />
+            <field name="descrErrore" length="70" justify="left" padding=" " />
+            <field name="tipoErrore" length="1" padding=" " />
+            <field name="filler" length="64" ignore="true" />
+        </record>
+    </stream>
+
+    <!-- FILE PRODOTTO DA TE00G924 -->
+    <stream name="KTRINF0" format="fixedlength">
+        <record name="KTRINF0_RECORD" class="it.cedacri.te.data.model.TE000901">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="canale" length="4" padding=" " />
+            <field name="tabella" length="8" padding=" " />
+            <field name="filler" length="23" ignore="true" />
+            <field name="dati" length="unbounded" padding=" " trim="false" keepPadding="true" /> <!-- 5000 padding=" " justify="left" -->
+        </record>
+    </stream>
+
+    <!-- TABELLA DATE CONTRATTO -->
+    <stream name="SEQTBDK" format="fixedlength">
+        <typeHandler name="zerodates" class="it.cedacri.util.typehandler.LocalDateSKTypeHandler" />
+        <record name="SEQTBDK_RECORD" class="it.cedacri.te.data.model.TE0009DK">
+            <field name="istituto" length="2" padding=" " minOccurs="0" />
+            <field name="contratto" length="13" padding=" " minOccurs="0" />
+            <field name="flagStatoAvanzamentoContratto" length="15" padding=" " minOccurs="0" />
+            <field name="dataAperturaContratto" typeHandler="zerodates" length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="dataPersonalizzazioneAreeServizi" typeHandler="zerodates"  length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="dataPersonalizzazioneRapporti" typeHandler="zerodates"  length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="dataIntroduzioneAccessori" typeHandler="zerodates"  length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="dataControlloContratto" typeHandler="zerodates"  length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="dataStampaContratto" typeHandler="zerodates"  length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="dataFirmaContratto" typeHandler="zerodates"  length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="dataChiusuraContratto" typeHandler="zerodates"  length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="dataModificaContratto" typeHandler="zerodates"  length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="campoNuovoA" length="8" padding=" " minOccurs="0" />
+            <field name="campoNuovoB" length="8" padding=" " minOccurs="0" />
+        </record>
+    </stream>
+
+
+    <!-- TABELLA DELLE GESTIONI DELLE PROCEDURE INFORMATIVE -->
+    <stream name="SEQTBI2" format="fixedlength">
+        <record name="SEQTBI2_RECORD" class="it.cedacri.te.data.model.TE0009I2">
+            <field name="componenteTecnologico" length="8" padding=" " />
+            <field name="tipoProdotto" length="2" padding=" " />
+            <field name="flussoInformativo" length="1" padding=" " />
+            <field name="YFICRP" length="1" padding=" " ignore="true" /> <!-- CAMPO NON UTILIZZATO -->
+            <field name="progProduzioneFlussoInformativo" length="8" />
+            <field name="filler" length="unbounded" ignore="true" minOccurs="0" />
+        </record>
+    </stream>
+
+    <!-- TABELLA DEI PRODOTTI ACQUISITI TRAMITE CONTRATTO -->
+    <stream name="SEQTBPK" format="fixedlength">
+        <record name="SEQTBPK_RECORD" class="it.cedacri.te.data.model.TE0009PK">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="prodotto" length="8" padding=" " />
+            <field name="idMarketing" length="5" padding=" " />
+            <field name="numReleaseProdotto" length="2" padding=" " />
+            <field name="numVersioneProdotto" length="2" padding=" " />
+            <field name="tipoProdotto" length="2" padding=" " />
+            <field name="idLineaProdottoTE" length="8" padding=" " />
+            <field name="idProdottoGUC" length="5" padding=" " />
+            <field name="descrBreve" length="20" padding=" " />
+            <field name="descrCompleta" length="60" padding=" " />
+            <field name="idContrattualistica" length="36" padding=" " />
+            <field name="flagPartiTerze" length="1" padding=" " />
+            <field name="descrAziendaFornitrice" length="36" padding=" " />
+        </record>
+    </stream>
+
+
+    <!-- TABELLA DEI SERVIZI ACQUISITI TRAMITE CONTRATTO -->
+    <stream name="SEQTBSK" format="fixedlength">
+    	<typeHandler name="typehandlerzerodates" class="it.cedacri.util.typehandler.LocalDateSKTypeHandler" />
+        <record name="SEQTBSK_RECORD" class="it.cedacri.te.data.model.TE0009SK">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="prodotto" length="8" padding=" " />
+            <field name="area" length="8" padding=" " />
+            <field name="servizio" length="8" padding=" " />
+            <field name="flagUpdateAreeServizi" length="1" padding=" " />
+            <field name="flagAbilitazioneAreeServizi" length="1" padding=" " />
+            <field name="componenteTecnologico" length="8" padding=" " />
+            <field name="numReleaseServizio" length="2" padding=" " />
+            <field name="numVersioneServizio" length="2" padding=" " />
+            <field name="idMarketing" length="5" padding=" " />
+            <field name="idProdottoGUC" length="5" padding=" " />
+            <field name="flagAssegnazioneDataApertura" length="2" padding=" " />
+            <field name="dataInizioFornituraServizio" typeHandler="typehandlerzerodates" length="8" padding=" " format="yyyyMMdd" />
+            <field name="dataFineFornituraServizio" typeHandler="typehandlerzerodates" length="8" padding=" " format="yyyyMMdd" />
+            <field name="descrBreve" length="20" padding=" " />
+            <field name="descrCompleta" length="unbounded" minOccurs="0" />
+        </record>
+    </stream>
+
+    <!-- TABELLA DEI RAPPORTI CON SERVIZI INFORMATIVI -->
+    <stream name="SEQTBRS" format="fixedlength">
+        <typeHandler name="zerodates" class="it.cedacri.util.typehandler.LocalDateSKTypeHandler" />
+        <record name="SEQTBRS_RECORD" class="it.cedacri.te.data.model.TE0009RS">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="servizio" length="8" padding=" " />
+            <field name="rapporto" length="13" padding=" " />
+            <field name="dataAttivazione" typeHandler="zerodates" length="8" padding=" " format="yyyyMMdd" />
+            <field name="dataDisattivazione" typeHandler="zerodates" length="8" padding=" " format="yyyyMMdd" />
+            <field name="flagTipoFlusso" length="1" padding=" " keepPadding="true" trim="false" />
+            <field name="filler" length="unbounded" minOccurs="0" />
+        </record>
+    </stream>
+
+
+    <!-- TABELLA DEI RAPPORTI CON SERVIZI INFORMATIVI DI ESITO -->
+    <stream name="SEQTBFI" format="fixedlength">
+        <record name="SEQTBFI_RECORD" class="it.cedacri.te.data.model.TE0009FI">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="servizio" length="8" padding=" " />
+            <field name="rapporto" length="13" padding=" " />
+            <field name="flagTipoFlusso" length="1" padding=" " minOccurs="0" /> <!-- FIXME senza minOccurs=0 va in errore su TE00G925 -->
+            <field name="dataAttivazione" length="8" padding=" " minOccurs="0" /> <!-- FIXME dismesso (senza minOccurs=0 va in errore su TE00G925) -->
+            <field name="dataDisattivazione" length="8" padding=" " minOccurs="0" /> <!-- FIXME dismesso (senza minOccurs=0 va in errore su TE00G925) -->
+        </record>
+    </stream>
+
+    <!-- TABELLA DELLE FUNZIONI INFORMATIVE SENZA RAPPORTO - NON E' ASSOCIATO AD UN FILE FISICO -->
+    <stream name="TE00TB00" format="fixedlength">
+        <record name="record" class="it.cedacri.te.data.model.TE000900">
+            <field name="progProduzioneFlussoInformativo" length="8" padding=" " />
+        </record>
+    </stream>
+    <!-- CANALI SIA -->
+
+    <!-- LEGAMI SIA-CONTRATTO PER IL CANALE QUERCIA -->
+    <stream name="SEQTBQC" format="fixedlength">
+        <record name="SEQTBQC_RECORD" class="it.cedacri.te.data.model.TE0009QC">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="idAID" length="6" padding=" " />
+            <field name="flagAbilitazioneCrittografia" length="1" padding=" " />
+            <field name="chiaveCrittografia" length="8" padding=" " />
+            <field name="codiceSIA" length="5" padding=" " />
+            <field name="flagTipoAddebito" length="1" padding=" " />
+            <field name="filler" length="unbounded" ignore="true" minOccurs="0" />
+        </record>
+    </stream>
+
+    <!-- LEGAMI SIA-CONTRATTO PER IL CANALE CORE BANKING -->
+    <stream name="SEQTBAD" format="fixedlength">
+        <record name="SEQTBAD_RECORD" class="it.cedacri.te.data.model.TE0009AD">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="idUtenteCBICedacri" length="5" padding=" " />
+            <field name="idInternoCBICedacri" length="5" padding=" " />
+            <field name="postazione" length="5" padding=" " />
+            <field name="aliasCBICedacri" length="20" padding=" " />
+            <field name="pwInizialeCBICedacri" length="8" padding=" " />
+            <field name="codiceSIA" length="5" padding=" " />
+            <field name="flagAbilitazioneCBI" length="1" padding=" " />
+            <field name="codiceFiscale" length="16" padding=" " />
+            <field name="flagPasswordDispositiva" length="1" padding=" " />
+            <field name="abiBancaAttiva" length="5" padding=" " />
+            <field name="flagPrenotazioneStampa" length="1" padding=" " />
+            <field name="flagMultibanca" length="1" padding=" " />
+            <field name="flagPresenzaCodiceSIA" length="1" padding=" " />
+            <field name="flagTipoAddebito" length="1" padding=" " minOccurs="0" trim="false" keepPadding="true" /> <!-- FIXME verificare che sia corretto che manca questo campo in alcuni record -->
+            <field name="tipoOperativitaContratto" length="1" padding=" " minOccurs="0" trim="false" keepPadding="true" /> <!-- FIXME verificare che sia corretto che manca questo campo in alcuni record -->
+            <field name="filler" length="unbounded" minOccurs="0" trim="false" padding=" " keepPadding="true"  /> <!-- prima non c'era minOccurs -->
+        </record>
+    </stream>
+
+    <!-- LEGAMI SIA-CONTRATTO PER IL CANALE HBNET -->
+    <stream name="SEQTBAI" format="fixedlength">
+        <record name="SEQTBAI_RECORD" class="it.cedacri.te.data.model.TE0009AI">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="idUtenteHBNEXT" length="5" padding=" " />
+            <field name="idInternoHBNEXT" length="5" padding=" " />
+            <field name="postazione" length="5" padding=" " />
+            <field name="idAliasHBNEXT" length="20" padding=" " />
+            <field name="pwInizialeHBNEXT" length="8" padding=" " />
+            <field name="codiceSIA" length="5" padding=" " />
+            <field name="flagAbilitazioneCBI" length="1" padding=" " />
+            <field name="codiceFiscale" length="16" padding=" " />
+            <field name="flagImportFlussoCBI" length="1" padding=" " />
+            <field name="flagDistintaBonifico" length="1" padding=" " />
+            <field name="flagPasswordDispositiva" length="1" padding=" " />
+            <field name="flagRiepilogoSaldo" length="1" padding=" " />
+            <field name="abiBancaAttiva" length="5" padding=" " />
+            <field name="flagComunicazioni" length="1" padding=" " />
+            <field name="flagPrenotazioneStampa" length="1" padding=" " minOccurs="0" /> <!-- senza minOccurs="0" errore nella TE00G925 -->
+            <field name="filler" length="unbounded" padding=" " minOccurs="0" trim="false" keepPadding="true" /> <!-- 26 -->
+        </record>
+    </stream>
+
+    <!-- LEGAMI SIA-CONTRATTO PER IL CANALE CBI -->
+    <stream name="SEQTBSB" format="fixedlength">
+        <record name="SEQTBSB_RECORD" class="it.cedacri.te.data.model.TE0009SB">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="codiceSIA" length="5" padding=" " />
+        </record>
+    </stream>
+
+    <!-- LEGAMI SIA-CONTRATTO PER IL CANALE RBNET -->
+    <stream name="SEQTBSI" format="fixedlength">
+        <record name="SEQTBSI_RECORD" class="it.cedacri.te.data.model.TE0009SI">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="codiceSIA" length="5" padding=" " />
+            <field name="filler" length="unbounded" minOccurs="0" />
+        </record>
+    </stream>
+
+    <!-- TABELLA DELLE INFORMAZIONI CONTRATTI AGGREGATE - OUTPUT DI TE00G925 -->
+    <stream name="KTRINF" format="fixedlength">
+        <typeHandler name="comp4handler" class="it.cedacri.util.typehandler.comp.UCompTypeHandler" />
+        <record name="KTRINF_RECORD" class="it.cedacri.te.data.model.TE000902">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="codiceSia" length="5" padding=" " />
+            <field name="rapporto" length="13" padding=" " />
+            <field name="canale" length="4" padding=" " />
+            <field name="codiceAbi" length="5" padding=" " />
+            <field name="ndgCliente" length="12" justify="right" padding=" " />
+            <field name="dataFirmaContratto" length="8" padding=" " format="yyyyMMdd" minOccurs="0" />
+            <field name="dataChiusuraContratto" length="8" padding=" " format="yyyyMMdd" minOccurs="0" />
+            <field name="codiceCentroApplicativo" length="5" padding=" " />
+            <field name="codiceBancaLeader" length="5" padding=" " />
+            <field name="descrizioneCliente" length="40" padding=" " />
+            <field name="postazione" length="5" padding=" " />
+            <field name="contrattoPrincipale" length="13" padding=" " />
+            <field name="codiceAidQuercia" length="6" padding=" " />
+            <field name="flagAbilitazioneCrittografiaQuercia" length="1" padding=" " />
+            <field name="chiaveCrittografiaQuercia" length="8" padding=" " />
+            <field name="codiceAbiQuercia" length="5" padding=" " />
+            <field name="tipoCodiceUtenteMultitel" length="1" padding=" " />
+            <field name="codiceRB8multitel" length="4" padding=" " />
+            <field name="codiceRB2000multitel" length="8" padding=" " />
+            <field name="codiceAliasRB2000multitel" length="30" padding=" " />
+            <field name="categoriaContratto" length="4" padding=" " />
+            <field name="sottocategoriaContratto" length="4" padding=" " />
+            <field name="tipoContratto" length="3" padding=" " />
+            <field name="codiceCab" length="5" padding=" " />
+            <field name="codiceConto" length="12" padding=" " />
+            <field name="cinbban" length="1" padding=" " />
+            <field name="bytleu" length="1" padding=" " />
+            <field name="divisa" length="3" padding=" " />
+            <field name="codiceIstitutoBancaLeader" length="2" padding=" " />
+            <field name="codiceLingua" length="1" padding=" " />
+            <field name="postazioneAvvisaturaEffetti" length="12" padding=" " />
+            <field name="identificativoSetifMultitel" length="16" padding=" " />
+            <field name="codiceProdotto" length="8" padding=" " />
+            <field name="canaleCbiBpel" length="2" padding=" " />
+            <field name="codiceSiaPrincipaleBpel" length="5" padding=" " />
+            <field name="codicePaese" length="2" padding=" " />
+            <field name="ciniban" length="2" padding=" " />
+            <field name="flagAbilitazioneCbi" length="1" padding=" " />
+            <field name="flagMultibanca" length="1" padding=" " />
+            <field name="filler262" length="262" ignore="true" />
+            <field name="numElementiTabella" length="2" typeHandler="comp4handler" format="4" padding=" " /> <!-- LENGTH 550 -->
+            <segment name="flussiInformativi" collection="list" occursRef="numElementiTabella" class="it.cedacri.te.data.model.TE000902_FlussoInformativo">
+                <field name="progProdFlussoInformativo" length="8" padding=" " />
+                <field name="flagTipoFlusso" length="1" padding=" " />
+            </segment>
+        </record>
+    </stream>
+
+    <!-- FINE CANALI SIA -->
+
+
+    <!-- TE00G926 -->
+    <stream name="SEQTBNG" format="fixedlength">
+        <record name="SEQTBNG_RECORD" class="it.cedacri.te.data.model.TE0009NG">
+            <field name="istituto" length="2" padding=" "  />
+            <field name="contratto" length="13" padding=" "  />
+            <field name="ndgCliente" length="12" justify="right" padding="0" />
+           	<field name="intestazioneCliente" length="40" padding=" "  />
+        </record>
+    </stream>
+
+    <stream name="SEQTBQB" format="fixedlength">
+        <record name="SEQTBQB_RECORD" class="it.cedacri.te.data.model.TE0009QB">
+            <field name="istituto" length="2" padding=" "  />
+            <field name="contratto" length="13" padding=" "  />
+            <field name="codiceAbi" length="5" padding=" "  />
+        </record>
+    </stream>
+
+    <stream name="SEQTBBC" format="fixedlength">
+        <record name="SEQTBBC_RECORD" class="it.cedacri.te.data.model.TE0009BC">
+            <field name="istituto" length="2" padding=" "  />
+            <field name="contratto" length="13" padding=" "  />
+            <field name="codiceAbi" length="5" padding=" "  />
+        </record>
+    </stream>
+
+    <stream name="SEQTBBA" format="fixedlength">
+        <record name="SEQTBBA_RECORD" class="it.cedacri.te.data.model.TE0009BA">
+            <field name="istituto" length="2" padding=" "  />
+            <field name="contratto" length="13" padding=" "  />
+            <field name="codiceAbi" length="5" padding=" "  />
+        </record>
+    </stream>
+
+    <stream name="SEQTBQP" format="fixedlength">
+        <record name="SEQTBQP_RECORD" class="it.cedacri.te.data.model.TE0009QP">
+            <field name="istituto" length="2" padding=" "  />
+            <field name="contratto" length="13" padding=" "  />
+            <field name="codiceAbi" length="5" padding=" "  />
+        </record>
+    </stream>
+
+    
+    <stream name="SEQTBAN" format="fixedlength">
+        <record name="SEQTBAN_RECORD" class="it.cedacri.te.data.model.TE0009AN">
+            <field name="istituto" length="2" padding=" "  />
+            <field name="contratto" length="13" padding=" "  />
+            <field name="ndgCliente" length="12" justify="right" padding="0"  />
+            <field name="ndgClientePromotore" length="12" justify="right" padding="0"  />
+            <field name="codiceCategoria" length="4" padding=" "  />
+            <field name="codiceSottoCategoria" length="4" padding=" "  />
+            <field name="codiceCorrenteAddebito" length="13" padding=" "  />
+        </record>
+    </stream>
+
+    <stream name="SEQTBT1" format="fixedlength">
+        <typeHandler name="comp3handler" class="it.cedacri.util.typehandler.comp.SComp3TypeHandler" />
+        <record name="SEQTBT1_RECORD" class="it.cedacri.te.data.model.TE0009T1">
+            <field name="codiceAbi" length="3" format="5" typeHandler="comp3handler" />
+            <field name="descrizioneAbi" length="10" />
+            <field name="centroApplicativo" length="3" format="5" typeHandler="comp3handler" />
+        </record>
+    </stream>
+	
+    <stream name="SEQTBPO" format="fixedlength">
+        <record name="SEQTBPO_RECORD" class="it.cedacri.te.data.model.TE0009PO">
+            <field name="istituto" length="2" padding=" "  />
+            <field name="contratto" length="13" padding=" "  />
+            <field name="postazione" length="5" padding=" "  />
+            <field name="flagAbilitazioneCBI" length="1" padding=" "  />
+            <field name="codiceInstallatore" length="6" padding=" "  />
+        </record>
+    </stream>
+
+    <stream name="SEQTBKL" format="fixedlength">
+        <record name="SEQTBKL_RECORD" class="it.cedacri.te.data.model.TE0009KL">
+            <field name="istituto" length="2" padding=" "  />
+            <field name="contrattoDelega" length="13" padding=" "  />
+            <field name="flagAbilitazioneCBI" length="1" padding=" "  />
+            <field name="contrattoPrincipale" length="13" padding=" "  />
+        </record>
+    </stream>
+
+	<!-- FILE OUTPUT TE00G926 -->
+    <stream name="KTRINFO" format="fixedlength">
+        <typeHandler name="comp4handler" class="it.cedacri.util.typehandler.comp.UCompTypeHandler" />
+        <record name="KTRINFO_RECORD" class="it.cedacri.te.data.model.TE000902">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="codiceSia" length="5" padding=" " />
+            <field name="rapporto" length="13" padding=" " />
+            <field name="canale" length="4" padding=" " />
+            <field name="codiceAbi" length="5" padding=" " />
+            <field name="ndgCliente" length="12" justify="right" padding="0" />
+            <field name="dataFirmaContratto" length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="dataChiusuraContratto" length="8" padding=" " minOccurs="0" format="yyyyMMdd" />
+            <field name="codiceCentroApplicativo" length="5" padding=" " />
+            <field name="codiceBancaLeader" length="5" padding=" " />
+            <field name="descrizioneCliente" length="40" padding=" " />
+            <field name="postazione" length="5" padding=" " />
+            <field name="contrattoPrincipale" length="13" padding=" " />
+            <field name="codiceAidQuercia" length="6" padding=" " />
+            <field name="flagAbilitazioneCrittografiaQuercia" length="1" padding=" " />
+            <field name="chiaveCrittografiaQuercia" length="8" padding=" " />
+            <field name="codiceAbiQuercia" length="5" padding=" " />
+            <field name="tipoCodiceUtenteMultitel" length="1" padding=" " />
+            <field name="codiceRB8multitel" length="4" padding=" " />
+            <field name="codiceRB2000multitel" length="8" padding=" " />
+            <field name="codiceAliasRB2000multitel" length="30" padding=" " />
+            <field name="categoriaContratto" length="4" padding=" " />
+            <field name="sottocategoriaContratto" length="4" padding=" " />
+            <field name="tipoContratto" length="3" padding=" " />
+            <field name="codiceCab" length="5" padding=" " />
+            <field name="codiceConto" length="12" padding=" " />
+            <field name="cinbban" length="1" padding=" " />
+            <field name="bytleu" length="1" padding=" " />
+            <field name="divisa" length="3" padding=" " />
+            <field name="codiceIstitutoBancaLeader" length="2" padding=" " />
+            <field name="codiceLingua" length="1" padding=" " />
+            <field name="postazioneAvvisaturaEffetti" length="12" padding=" " />
+            <field name="identificativoSetifMultitel" length="16" padding=" " />
+            <field name="codiceProdotto" length="8" padding=" " />
+            <field name="canaleCbiBpel" length="2" padding=" " />
+            <field name="codiceSiaPrincipaleBpel" length="5" padding=" " />
+            <field name="codicePaese" length="2" padding=" " />
+            <field name="ciniban" length="2" padding=" " />
+            <field name="flagAbilitazioneCbi" length="1" padding=" " />
+            <field name="flagMultibanca" length="1" padding=" " />
+            <field name="filler262" length="262" ignore="true" />
+            <field name="numElementiTabella" length="2" typeHandler="comp4handler" format="4" /> <!-- LENGTH 550 -->
+            <segment name="flussiInformativi" collection="list" occursRef="numElementiTabella" class="it.cedacri.te.data.model.TE000902_FlussoInformativo">
+                <field name="progProdFlussoInformativo" length="8" padding=" " />
+                <field name="flagTipoFlusso" length="1" padding=" " />
+            </segment>
+        </record>
+    </stream>
+    
+     <!-- FILE ANOMALI TE00G926 -->
+    <stream name="ANOMALI1" format="fixedlength">
+        <record name="ANOMALI1_RECORD" class="it.cedacri.te.data.model.TE000905">
+            <field name="istituto" length="2" padding=" " />
+            <field name="contratto" length="13" padding=" " />
+            <field name="canale" length="4" padding=" " />
+            <field name="codiceSia" length="5" padding=" " />
+            <field name="rapporto" length="13" padding=" " />
+            <field name="dataElaborazione" length="8" format="yyyyMMdd" />
+            <field name="oraElaborazione" length="8" format="HHmmssSS" />
+            <field name="codiceProgramma" length="8" padding=" " />
+            <field name="codiceErrore" length="4" padding=" " />
+            <field name="descrErrore" length="70" justify="left" padding=" " />
+            <field name="tipoErrore" length="1" padding=" " />
+            <field name="filler" length="64" ignore="true" />
+        </record>
+    </stream>
+</beanio>

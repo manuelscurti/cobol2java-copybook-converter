@@ -1,0 +1,31 @@
+<!--<copybook>-->
+<!--    <level id="5" name="NOME_CLASSE_JAVA_DEFINITO_DA_UTENTE">-->
+<!--        <field name="mpconf" definition="X(%)" params="01" comment="" />-->
+<!--        <level id="10" name="areal">-->
+<!--            <level id="15" name="maprig" occurs="17">-->
+<!--                <field name="mpsel" definition="X(%)" params="01" comment="" />-->
+<!--                <field name="mpriga" definition="X(%)" params="01" comment="" />-->
+<!--                <field name="nritem" definition="X(%)" params="01" comment="" />-->
+<!--            </level>-->
+<!--            <field name="filler" definition="X(%)" params="72" comment="" ignore="true" />-->
+<!--        </level>-->
+<!--        <level id="10" name="an0233-tab-chiavi2">-->
+<!--            <level id="15" name="an0233elformin" occurs="6">-->
+<!--                <field name="an0233elformin" definition="X(%)" params="1" comment="" />-->
+<!--            </level>-->
+<!--        </level>-->
+<!--    </level>-->
+<!--</copybook>-->
+
+
+<copybook>
+    <field name="fieldA" type="pic" definition="X(%)" />
+    <field name="fieldB" type="group">
+        <field name="fieldB_1" definition="X(%)" />
+        <field name="fieldB_2" definition="X(%)" />
+    </field>
+    <field name="fieldC" type="list" occurs="6">
+
+    </field>
+
+</copybook>
